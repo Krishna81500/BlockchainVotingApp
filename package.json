@@ -1,0 +1,118 @@
+{
+  "name": "securevote-blockchain-voting",
+  "version": "1.0.0",
+  "description": "A secure, transparent, and immutable voting system built on blockchain technology for mobile devices",
+  "main": "index.html",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js",
+    "serve": "npx http-server -p 8000 -o",
+    "client": "npx live-server --port=8000",
+    "build": "echo 'No build process needed for vanilla JS app'",
+    "test": "echo 'Tests not implemented yet'"
+  },
+  "keywords": [
+    "blockchain",
+    "voting",
+    "mobile",
+    "security",
+    "democracy",
+    "transparency",
+    "immutable",
+    "cryptography",
+    "election",
+    "web-app"
+  ],
+  "author": {
+    "name": "SecureVote Team",
+    "email": "team@securevote.com",
+    "url": "https://securevote.com"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/securevote/blockchain-voting-app.git"
+  },
+  "bugs": {
+    "url": "https://github.com/securevote/blockchain-voting-app/issues"
+  },
+  "homepage": "https://securevote.com",
+  "dependencies": {
+    "axios": "^1.13.2",
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.3",
+    "express": "^4.18.2",
+    "nodemailer": "^6.9.7"
+  },
+  "devDependencies": {
+    "http-server": "^14.1.1",
+    "live-server": "^1.2.2"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead",
+    "iOS >= 10",
+    "Android >= 6"
+  ],
+  "features": {
+    "blockchain": {
+      "consensus": "Proof of Work",
+      "hashing": "SHA-256 (simplified)",
+      "privacy": "Voter ID hashing",
+      "immutability": "Chain validation"
+    },
+    "security": {
+      "authentication": "Multi-factor (ID + Biometric)",
+      "encryption": "Cryptographic signatures",
+      "privacy": "Anonymous voting",
+      "integrity": "Blockchain validation"
+    },
+    "ui": {
+      "design": "Mobile-first responsive",
+      "framework": "Vanilla JavaScript",
+      "styling": "Modern CSS3",
+      "icons": "Font Awesome 6.0",
+      "fonts": "Inter"
+    }
+  },
+  "technical_specs": {
+    "blockchain": {
+      "block_time": "15 seconds",
+      "hash_algorithm": "Custom SHA-256",
+      "difficulty": "2 leading zeros",
+      "max_votes_per_block": "Unlimited"
+    },
+    "performance": {
+      "target_devices": "Mobile phones and tablets",
+      "min_screen_size": "320px width",
+      "max_screen_size": "768px width",
+      "load_time": "< 3 seconds"
+    }
+  },
+  "demo_credentials": {
+    "voters": [
+      {
+        "id": "V001",
+        "pin": "1234",
+        "name": "John Doe",
+        "constituency": "Central District"
+      },
+      {
+        "id": "V002",
+        "pin": "5678",
+        "name": "Jane Smith",
+        "constituency": "North District"
+      },
+      {
+        "id": "V003",
+        "pin": "9012",
+        "name": "Mike Johnson",
+        "constituency": "South District"
+      }
+    ]
+  }
+}
