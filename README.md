@@ -1,201 +1,209 @@
-# SecureVote - Blockchain Voting System Mobile App
+# SecureVote - Blockchain Voting System
 
-A secure, transparent, and immutable voting system built on blockchain technology for mobile devices.
+A comprehensive blockchain-based voting system with real OTP authentication, biometric verification, and admin panel.
 
 ## 🚀 Features
 
-### Core Functionality
-- **Blockchain-based Voting**: All votes are recorded on an immutable blockchain
-- **Voter Authentication**: Secure biometric and ID-based authentication
-- **Real-time Results**: Live vote counting with blockchain verification
-- **Transparency**: Complete blockchain explorer for vote verification
-- **Mobile-First Design**: Optimized for mobile devices with responsive UI
+### Voting App (`/votingapp`)
+- **Real OTP Authentication** - Email-based OTP verification
+- **Camera Integration** - Aadhaar card and face photo capture
+- **Biometric Verification** - Face matching for secure voting
+- **Blockchain Integration** - Immutable vote recording
+- **Multi-language Support** - English, Hindi, Kannada
+- **Mobile-responsive Design** - Optimized for all devices
 
-### Security Features
-- **Immutable Records**: Votes cannot be altered once recorded on blockchain
-- **Voter Privacy**: Voter IDs are hashed for anonymity while maintaining verification
-- **Duplicate Prevention**: System prevents double voting
-- **Cryptographic Signatures**: Each vote is cryptographically signed
-- **Blockchain Validation**: Continuous chain integrity verification
+### Admin Panel (`/admin`)
+- **Voter Management** - View, edit, delete registered voters
+- **Candidate Management** - Add, edit, remove candidates
+- **Election Control** - Start, pause, end elections
+- **Live Results** - Real-time vote counting and analytics
+- **Blockchain Monitor** - Network status and block explorer
+- **Data Export** - CSV export for voters and results
 
-### User Interface
-- **Intuitive Design**: Clean, modern mobile interface
-- **Multi-Screen Navigation**: Dashboard, Voting, Results, and Blockchain Explorer
-- **Real-time Updates**: Live blockchain stats and voting results
-- **Visual Feedback**: Progress bars, animations, and status indicators
-- **Responsive Layout**: Works on all mobile screen sizes
+## 🛠️ Setup Instructions
 
-## 🛠️ Technology Stack
+### Prerequisites
+- Node.js (v14 or higher)
+- Gmail account for OTP emails
+- Modern web browser with camera support
 
-- **Frontend**: HTML5, CSS3, JavaScript (ES6+)
-- **Blockchain**: Custom blockchain implementation with Proof of Work
-- **Styling**: Modern CSS with gradients, animations, and mobile-first design
-- **Icons**: Font Awesome 6.0
-- **Fonts**: Inter font family for modern typography
+### Installation
 
-## 📱 App Screens
-
-### 1. Login Screen
-- Voter ID authentication
-- Biometric PIN verification
-- Blockchain connection status
-- Real-time blockchain statistics
-
-### 2. Dashboard
-- User profile and verification status
-- Voting status and timeline
-- Quick action buttons
-- Navigation to all features
-
-### 3. Voting Screen
-- Candidate selection interface
-- Candidate information display
-- Vote confirmation modal
-- Blockchain submission process
-
-### 4. Results Screen
-- Live vote counting
-- Visual progress bars
-- Candidate rankings
-- Blockchain verification status
-
-### 5. Blockchain Explorer
-- Current block information
-- Recent blocks list
-- Transaction details
-- Network statistics
-
-## 🔧 Installation & Setup
-
-1. **Clone/Download the project**
+1. **Clone or Download the Project**
    ```bash
-   git clone [repository-url]
    cd BlockchainVotingApp
    ```
 
-2. **Open in browser**
-   - Simply open `index.html` in any modern web browser
-   - For mobile testing, use browser developer tools device simulation
+2. **Install Dependencies**
+   ```bash
+   npm install
+   ```
 
-3. **Test Credentials**
-   - Voter ID: `V001`, PIN: `1234` (John Doe)
-   - Voter ID: `V002`, PIN: `5678` (Jane Smith)
-   - Voter ID: `V003`, PIN: `9012` (Mike Johnson)
+3. **Configure Environment Variables**
+   
+   Update the `.env` file with your Gmail credentials:
+   ```env
+   EMAIL_USER=your-gmail@gmail.com
+   EMAIL_PASS=your-app-password
+   PORT=3003
+   ```
 
-## 🎯 How to Use
+   **Important:** Use Gmail App Password, not your regular password:
+   - Go to Google Account Settings
+   - Security → 2-Step Verification → App passwords
+   - Generate a new app password for "Mail"
 
-### For Voters:
-1. **Login**: Enter your Voter ID and Biometric PIN
-2. **Dashboard**: View your voting status and election information
-3. **Vote**: Select your preferred candidate and confirm
-4. **Results**: View live election results
-5. **Verify**: Check blockchain for vote verification
+4. **Start the Server**
+   ```bash
+   npm start
+   ```
 
-### For Election Officials:
-1. **Monitor**: Use blockchain explorer to monitor voting activity
-2. **Verify**: Validate blockchain integrity
-3. **Results**: Access real-time voting statistics
-4. **Audit**: Review complete voting history on blockchain
+5. **Access the Applications**
+   - **Main Page:** http://localhost:3003
+   - **Voting App:** http://localhost:3003/votingapp
+   - **Admin Panel:** http://localhost:3003/admin
 
-## 🔐 Security Implementation
+## 📱 How to Use
 
-### Blockchain Security
-- **Hash-based Integrity**: Each block contains hash of previous block
-- **Proof of Work**: Mining algorithm prevents tampering
-- **Cryptographic Signatures**: Each vote is digitally signed
-- **Chain Validation**: Continuous integrity checking
+### For Voters
 
-### Voter Privacy
-- **ID Hashing**: Voter IDs are hashed before blockchain storage
-- **Anonymous Voting**: No direct link between voter and vote choice
-- **Secure Authentication**: Multi-factor authentication system
+1. **Registration**
+   - Go to `/votingapp`
+   - Click "Register as New Voter"
+   - Fill in personal details
+   - Capture Aadhaar card photo using camera
+   - Capture face photo for biometric verification
+   - Verify email with OTP
 
-### Data Protection
-- **Immutable Storage**: Votes cannot be changed once recorded
-- **Distributed Verification**: Multiple nodes can verify results
-- **Audit Trail**: Complete history of all voting activities
+2. **Login & Voting**
+   - Enter email address
+   - Verify with OTP sent to email
+   - Select candidate
+   - Complete face verification
+   - Submit vote to blockchain
 
-## 📊 Blockchain Architecture
+### For Administrators
 
-### Block Structure
-```javascript
-{
-    index: Number,           // Block number in chain
-    timestamp: Number,       // Block creation time
-    votes: Array,           // Array of vote transactions
-    previousHash: String,   // Hash of previous block
-    hash: String,          // Current block hash
-    nonce: Number          // Proof of work nonce
-}
+1. **Access Admin Panel**
+   - Go to `/admin`
+   - Navigate through different sections
+
+2. **Manage Voters**
+   - View all registered voters
+   - Export voter data
+   - Search and filter voters
+
+3. **Manage Candidates**
+   - Add new candidates
+   - Edit candidate information
+   - View vote counts
+
+4. **Monitor Elections**
+   - Start/pause/end elections
+   - View live results
+   - Monitor blockchain activity
+
+## 🔧 Technical Details
+
+### Architecture
+- **Frontend:** Vanilla JavaScript, HTML5, CSS3
+- **Backend:** Node.js, Express.js
+- **Email Service:** Nodemailer with Gmail SMTP
+- **Storage:** LocalStorage (demo), easily upgradeable to database
+- **Camera API:** WebRTC getUserMedia API
+
+### Security Features
+- **OTP Expiration:** 2-minute timeout
+- **Email Verification:** Real SMTP integration
+- **Biometric Verification:** Face photo capture and comparison
+- **Blockchain Simulation:** Immutable vote recording
+- **Data Validation:** Input sanitization and validation
+
+### API Endpoints
+- `POST /api/send-otp` - Send OTP to email
+- `POST /api/verify-otp` - Verify OTP code
+- `GET /api/health` - Server health check
+
+## 🌐 Deployment
+
+### Local Development
+```bash
+npm run dev  # Uses nodemon for auto-restart
 ```
 
-### Vote Structure
-```javascript
-{
-    voterId: String,        // Hashed voter ID
-    candidateId: Number,    // Selected candidate
-    timestamp: Number,      // Vote timestamp
-    signature: String       // Cryptographic signature
-}
-```
+### Production Deployment
+1. Set environment variables on your hosting platform
+2. Install dependencies: `npm install --production`
+3. Start server: `npm start`
 
-## 🎨 Design Features
+### Recommended Hosting
+- **Heroku:** Easy deployment with environment variables
+- **Vercel:** Serverless deployment
+- **DigitalOcean:** VPS hosting
+- **AWS EC2:** Scalable cloud hosting
 
-### Visual Elements
-- **Modern Gradients**: Purple and blue color scheme
-- **Smooth Animations**: CSS transitions and keyframes
-- **Mobile-First**: Responsive design for all devices
-- **Intuitive Icons**: Font Awesome icons throughout
-- **Clean Typography**: Inter font for readability
+## 📊 Demo Data
 
-### User Experience
-- **Loading States**: Visual feedback during operations
-- **Error Handling**: Clear error messages and alerts
-- **Confirmation Dialogs**: Prevent accidental actions
-- **Real-time Updates**: Live data refresh
-- **Offline Indicators**: Network status display
+The system includes sample data for testing:
 
-## 🚀 Future Enhancements
+### Test Candidates
+- Alice Johnson (Democratic Party)
+- Robert Smith (Republican Party)  
+- Maria Garcia (Independent)
 
-### Planned Features
-- **Multi-language Support**: Internationalization
-- **Advanced Analytics**: Detailed voting statistics
-- **Mobile App**: Native iOS/Android applications
-- **Smart Contracts**: Integration with Ethereum/other blockchains
-- **Biometric Authentication**: Fingerprint/face recognition
+### Sample Workflow
+1. Register with any email address
+2. Use real OTP sent to your email
+3. Capture photos using your device camera
+4. Vote for any candidate
+5. View results in admin panel
 
-### Technical Improvements
-- **Performance Optimization**: Faster blockchain operations
-- **Scalability**: Support for larger elections
-- **Security Audits**: Third-party security verification
-- **Accessibility**: Enhanced accessibility features
-- **PWA Support**: Progressive Web App capabilities
+## 🔒 Security Considerations
 
-## 📄 License
+### Production Recommendations
+- Use HTTPS for all communications
+- Implement rate limiting for OTP requests
+- Add CAPTCHA for bot prevention
+- Use proper database with encryption
+- Implement JWT tokens for session management
+- Add audit logging for all actions
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+### Privacy Features
+- Photos stored locally (can be encrypted)
+- Email addresses hashed in production
+- Blockchain ensures vote anonymity
+- No personal data in vote records
 
 ## 🤝 Contributing
 
 1. Fork the repository
-2. Create a feature branch
-3. Make your changes
+2. Create feature branch
+3. Make changes
 4. Test thoroughly
-5. Submit a pull request
+5. Submit pull request
 
-## 📞 Support
+## 📄 License
 
-For technical support or questions:
-- Email: support@securevote.com
-- Documentation: [Project Wiki]
-- Issues: [GitHub Issues]
+MIT License - feel free to use for educational and commercial purposes.
 
-## 🏆 Acknowledgments
+## 🆘 Support
 
-- Blockchain technology inspiration from Bitcoin and Ethereum
-- UI/UX design principles from modern mobile applications
-- Security best practices from cryptographic standards
-- Open source community for tools and libraries
+For issues and questions:
+- Check the console for error messages
+- Ensure camera permissions are granted
+- Verify email credentials in `.env`
+- Test with different browsers if needed
+
+## 🔮 Future Enhancements
+
+- Real blockchain integration (Ethereum, Hyperledger)
+- Advanced biometric verification (fingerprint, iris)
+- Mobile app development
+- Multi-factor authentication
+- Advanced analytics and reporting
+- Integration with government ID systems
+- Scalable database architecture
+- Real-time notifications
 
 ---
 
