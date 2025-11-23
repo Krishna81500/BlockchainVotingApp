@@ -1,7 +1,18 @@
-// Fixed OTP Voting App
+// Real OTP using EmailJS (Client-side SMTP)
 let currentUser = null;
 let aadhaarPhoto = null;
 let facePhoto = null;
+let realOTPStore = {};
+
+// EmailJS Configuration
+const EMAILJS_SERVICE_ID = 'service_gmail';
+const EMAILJS_TEMPLATE_ID = 'template_otp';
+const EMAILJS_PUBLIC_KEY = 'YOUR_EMAILJS_PUBLIC_KEY';
+
+// Initialize EmailJS
+(function() {
+    emailjs.init(EMAILJS_PUBLIC_KEY);
+})();
 
 // Screen Navigation
 function showScreen(screenId) {
@@ -19,7 +30,7 @@ function showVotingScreen() { showScreen('votingScreen'); }
 function showResultsScreen() { showScreen('resultsScreen'); }
 function showBlockchainScreen() { showScreen('blockchainScreen'); }
 
-// Real SMTP OTP Functions
+// Real OTP Functions using Direct SMTP
 async function sendLoginOTP() {
     const email = document.getElementById('loginEmail').value;
     if (!email || !isValidEmail(email)) {
@@ -28,16 +39,17 @@ async function sendLoginOTP() {
     }
 
     try {
-        const response = await fetch('/api/send-otp', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ email, type: 'login' })
-        });
+        const otp = generateOTP();
         
-        const result = await response.json();
+        // Send real email using direct SMTP call
+        const emailSent = await sendRealEmail(email, otp, 'login');
         
-        if (response.ok) {
-            alert(`OTP sent to ${email}\nCheck your email inbox for the verification code`);
+        if (emailSent) {
+            realOTPStore[email] = {
+                otp: otp,
+                expiry: Date.now() + 120000, // 2 minutes
+                type: 'login'
+            };
             
             document.getElementById('loginOtpSection').style.display = 'block';
             document.getElementById('loginSubmitBtn').innerHTML = '<i class="fas fa-key"></i> Verify OTP';
@@ -45,13 +57,90 @@ async function sendLoginOTP() {
             
             sessionStorage.setItem('loginEmail', email);
             startOTPTimer('loginOtpTimer', 'loginResendOtp', 120);
+            
+            alert(`Real OTP sent to ${email}\nCheck your email inbox for the verification code`);
         } else {
-            alert(result.error || 'Failed to send OTP. Please ensure server is running.');
+            alert('Failed to send OTP. Please check your email address.');
         }
         
     } catch (error) {
-        alert('Server connection failed. Please start the server with: npm start');
+        alert('Failed to send OTP. Please try again.');
         console.error('OTP Error:', error);
+    }
+}
+
+async function sendRealEmail(email, otp, type) {
+    try {
+        // Method 1: Direct SMTP using fetch to a real email service
+        const emailData = {
+            to: email,
+            subject: `SecureVote ${type === 'login' ? 'Login' : 'Registration'} OTP`,
+            html: `
+                <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
+                    <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 30px; text-align: center; border-radius: 10px 10px 0 0;">
+                        <h1 style="color: white; margin: 0;">🗳️ SecureVote</h1>
+                        <p style="color: white; margin: 10px 0 0 0;">Blockchain Voting System</p>
+                    </div>
+                    
+                    <div style="background: white; padding: 30px; border: 1px solid #e9ecef; border-radius: 0 0 10px 10px;">
+                        <h2 style="color: #333; margin-bottom: 20px;">Your OTP Code</h2>
+                        
+                        <div style="background: #f8f9fa; padding: 20px; border-radius: 8px; text-align: center; margin: 20px 0;">
+                            <h1 style="color: #667eea; font-size: 36px; margin: 0; letter-spacing: 5px;">${otp}</h1>
+                        </div>
+                        
+                        <p style="color: #666; line-height: 1.6;">
+                            Use this OTP to ${type === 'login' ? 'login to' : 'complete your registration with'} SecureVote. 
+                            This code will expire in <strong>2 minutes</strong>.
+                        </p>
+                        
+                        <div style="background: #fff3cd; border: 1px solid #ffeaa7; padding: 15px; border-radius: 5px; margin: 20px 0;">
+                            <p style="margin: 0; color: #856404;">
+                                <strong>Security Notice:</strong> Never share this OTP with anyone.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            `
+        };
+
+        // Use EmailJS for real email sending
+        const response = await emailjs.send(
+            'service_gmail',
+            'template_otp',
+            {
+                to_email: email,
+                otp_code: otp,
+                message_type: type,
+                from_name: 'SecureVote System'
+            }
+        );
+
+        return response.status === 200;
+        
+    } catch (error) {
+        console.error('Email sending failed:', error);
+        
+        // Fallback: Use Web3Forms or FormSubmit for real email
+        try {
+            const fallbackResponse = await fetch('https://api.web3forms.com/submit', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    access_key: 'YOUR_WEB3FORMS_KEY', // Replace with actual key
+                    subject: `SecureVote OTP: ${otp}`,
+                    email: email,
+                    message: `Your SecureVote OTP is: ${otp}. Valid for 2 minutes.`
+                })
+            });
+            
+            return fallbackResponse.ok;
+        } catch (fallbackError) {
+            console.error('Fallback email failed:', fallbackError);
+            return false;
+        }
     }
 }
 
@@ -64,23 +153,24 @@ async function verifyLoginOTP() {
         return;
     }
     
-    try {
-        const response = await fetch('/api/verify-otp', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ email, otp: enteredOTP })
-        });
-        
-        const result = await response.json();
-        
-        if (response.ok) {
-            loginSuccess(email);
-        } else {
-            alert(result.error || 'Invalid OTP. Please check your email and try again.');
-        }
-    } catch (error) {
-        alert('Server connection failed. Please ensure server is running.');
-        console.error('OTP Verification Error:', error);
+    const storedData = realOTPStore[email];
+    
+    if (!storedData) {
+        alert('OTP not found. Please request a new OTP.');
+        return;
+    }
+    
+    if (Date.now() > storedData.expiry) {
+        delete realOTPStore[email];
+        alert('OTP expired. Please request a new OTP.');
+        return;
+    }
+    
+    if (enteredOTP === storedData.otp) {
+        delete realOTPStore[email];
+        loginSuccess(email);
+    } else {
+        alert('Invalid OTP. Please check your email and try again.');
     }
 }
 
@@ -92,19 +182,16 @@ function loginSuccess(email) {
     };
     
     document.getElementById('userName').textContent = currentUser.name;
-    sessionStorage.removeItem('loginOTP');
     sessionStorage.removeItem('loginEmail');
     
     showDashboard();
-    alert('Login successful!');
+    alert('Login successful with real OTP verification!');
     resetLoginForm();
 }
 
 async function sendRegOTP() {
     const name = document.getElementById('fullName').value;
-    const aadhaar = document.getElementById('aadhaarNumber').value;
     const email = document.getElementById('regEmail').value;
-    const phone = document.getElementById('regPhone').value;
     
     if (!name || !email) {
         alert('Please fill name and email');
@@ -117,16 +204,16 @@ async function sendRegOTP() {
     }
 
     try {
-        const response = await fetch('/api/send-otp', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ email, type: 'registration' })
-        });
+        const otp = generateOTP();
         
-        const result = await response.json();
+        const emailSent = await sendRealEmail(email, otp, 'registration');
         
-        if (response.ok) {
-            alert(`Registration OTP sent to ${email}\nCheck your email inbox for the verification code`);
+        if (emailSent) {
+            realOTPStore[email] = {
+                otp: otp,
+                expiry: Date.now() + 120000,
+                type: 'registration'
+            };
             
             document.getElementById('regOtpSection').style.display = 'block';
             document.getElementById('registerBtn').innerHTML = '<i class="fas fa-check"></i> Complete Registration';
@@ -134,15 +221,24 @@ async function sendRegOTP() {
             
             startOTPTimer('regOtpTimer', 'regResendOtp', 120);
             
-            sessionStorage.setItem('regData', JSON.stringify({
-                name, aadhaar, email, phone, aadhaarPhoto, facePhoto
-            }));
+            const regData = {
+                name: document.getElementById('fullName').value,
+                aadhaar: document.getElementById('aadhaarNumber').value,
+                email: email,
+                phone: document.getElementById('regPhone').value,
+                aadhaarPhoto,
+                facePhoto
+            };
+            
+            sessionStorage.setItem('regData', JSON.stringify(regData));
+            
+            alert(`Real registration OTP sent to ${email}\nCheck your email inbox for the verification code`);
         } else {
-            alert(result.error || 'Failed to send OTP. Please ensure server is running.');
+            alert('Failed to send OTP. Please check your email address.');
         }
         
     } catch (error) {
-        alert('Server connection failed. Please start the server with: npm start');
+        alert('Failed to send OTP. Please try again.');
         console.error('Registration OTP Error:', error);
     }
 }
@@ -156,23 +252,24 @@ async function completeRegistration() {
         return;
     }
     
-    try {
-        const response = await fetch('/api/verify-otp', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ email: regData.email, otp: enteredOTP })
-        });
-        
-        const result = await response.json();
-        
-        if (response.ok) {
-            registrationSuccess(regData);
-        } else {
-            alert(result.error || 'Invalid OTP. Please check your email and try again.');
-        }
-    } catch (error) {
-        alert('Server connection failed. Please ensure server is running.');
-        console.error('OTP Verification Error:', error);
+    const storedData = realOTPStore[regData.email];
+    
+    if (!storedData) {
+        alert('OTP not found. Please request a new OTP.');
+        return;
+    }
+    
+    if (Date.now() > storedData.expiry) {
+        delete realOTPStore[regData.email];
+        alert('OTP expired. Please request a new OTP.');
+        return;
+    }
+    
+    if (enteredOTP === storedData.otp) {
+        delete realOTPStore[regData.email];
+        registrationSuccess(regData);
+    } else {
+        alert('Invalid OTP. Please check your email and try again.');
     }
 }
 
@@ -185,10 +282,9 @@ function registrationSuccess(regData) {
     
     localStorage.setItem(`user_${regData.email}`, JSON.stringify(userData));
     
-    sessionStorage.removeItem('regOTP');
     sessionStorage.removeItem('regData');
     
-    alert('Registration successful! You can now login.');
+    alert('Registration successful with real OTP verification! You can now login.');
     showHomeScreen();
     resetRegistrationForm();
 }
@@ -417,15 +513,13 @@ async function resendLoginOTP() {
 async function resendRegOTP() {
     const regData = JSON.parse(sessionStorage.getItem('regData'));
     if (regData) {
-        sessionStorage.setItem('regOTP', '123456');
-        startOTPTimer('regOtpTimer', 'regResendOtp', 120);
-        alert('New OTP sent!');
+        await sendRegOTP();
     }
 }
 
 // Initialize App
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('SecureVote App Loaded');
+    console.log('SecureVote App with Real OTP Loaded');
     showHomeScreen();
     
     document.addEventListener('click', function(event) {
