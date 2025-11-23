@@ -1,210 +1,133 @@
 # SecureVote - Blockchain Voting System
 
-A comprehensive blockchain-based voting system with real OTP authentication, biometric verification, and admin panel.
+A secure, transparent, and immutable voting system built with blockchain technology and admin approval workflow.
 
-## 🚀 Features
+## Features
 
-### Voting App (`/votingapp`)
-- **Real OTP Authentication** - Email-based OTP verification
-- **Camera Integration** - Aadhaar card and face photo capture
-- **Biometric Verification** - Face matching for secure voting
-- **Blockchain Integration** - Immutable vote recording
-- **Multi-language Support** - English, Hindi, Kannada
-- **Mobile-responsive Design** - Optimized for all devices
+- 🔐 **Multi-factor Authentication** (Email OTP + Face Recognition)
+- ⛓️ **Blockchain-secured** vote storage
+- 👨‍💼 **Admin Approval System** for user registrations
+- 📱 **Mobile-first** responsive design
+- 🌐 **Multi-language** support (English, Hindi, Kannada)
+- 🔍 **Real-time** result verification
 
-### Admin Panel (`/admin`)
-- **Voter Management** - View, edit, delete registered voters
-- **Candidate Management** - Add, edit, remove candidates
-- **Election Control** - Start, pause, end elections
-- **Live Results** - Real-time vote counting and analytics
-- **Blockchain Monitor** - Network status and block explorer
-- **Data Export** - CSV export for voters and results
+## Quick Start
 
-## 🛠️ Setup Instructions
+### 1. Clone Repository
+```bash
+git clone https://github.com/yourusername/blockchain-voting-app.git
+cd blockchain-voting-app
+```
 
-### Prerequisites
-- Node.js (v14 or higher)
-- Gmail account for OTP emails
-- Modern web browser with camera support
+### 2. Install Dependencies
+```bash
+npm install
+```
 
-### Installation
+### 3. Environment Setup
+Create `.env` file:
+```env
+# SMTP Configuration for Email OTP
+EMAIL_USER=your-gmail@gmail.com
+EMAIL_PASS=your-app-password
 
-1. **Clone or Download the Project**
-   ```bash
-   cd BlockchainVotingApp
-   ```
+# Server Configuration
+PORT=3003
+```
 
-2. **Install Dependencies**
-   ```bash
-   npm install
-   ```
+### 4. Start Application
+```bash
+npm start
+```
 
-3. **Configure Environment Variables**
-   
-   Update the `.env` file with your Gmail credentials:
-   ```env
-   EMAIL_USER=your-gmail@gmail.com
-   EMAIL_PASS=your-app-password
-   PORT=3003
-   ```
+### 5. Access Applications
+- **Mobile Voting App:** http://localhost:3003/
+- **Admin Panel:** http://localhost:3003/admin
 
-   **Important:** Use Gmail App Password, not your regular password:
-   - Go to Google Account Settings
-   - Security → 2-Step Verification → App passwords
-   - Generate a new app password for "Mail"
+## How It Works
 
-4. **Start the Server**
-   ```bash
-   npm start
-   ```
+### User Registration Flow
+1. User fills registration form with Aadhar details
+2. Face capture for biometric verification
+3. Email OTP verification
+4. Registration submitted with "Pending" status
+5. Admin reviews and approves/rejects registration
 
-5. **Access the Applications**
-   - **Main Page:** http://localhost:3003
-   - **Voting App:** http://localhost:3003/votingapp
-   - **Admin Panel:** http://localhost:3003/admin
+### Login Flow
+1. User enters email address
+2. System checks registration status:
+   - **Not Registered:** Redirected to registration
+   - **Pending:** Wait for admin approval message
+   - **Rejected:** Contact admin message
+   - **Approved:** OTP sent for login
+3. Email OTP verification
+4. Access to voting dashboard
 
-## 📱 How to Use
+### Admin Panel
+- View all user registrations
+- Filter by status (All, Pending, Approved, Rejected)
+- Approve or reject registrations
+- Real-time statistics dashboard
 
-### For Voters
+## Technology Stack
 
-1. **Registration**
-   - Go to `/votingapp`
-   - Click "Register as New Voter"
-   - Fill in personal details
-   - Capture Aadhaar card photo using camera
-   - Capture face photo for biometric verification
-   - Verify email with OTP
-
-2. **Login & Voting**
-   - Enter email address
-   - Verify with OTP sent to email
-   - Select candidate
-   - Complete face verification
-   - Submit vote to blockchain
-
-### For Administrators
-
-1. **Access Admin Panel**
-   - Go to `/admin`
-   - Navigate through different sections
-
-2. **Manage Voters**
-   - View all registered voters
-   - Export voter data
-   - Search and filter voters
-
-3. **Manage Candidates**
-   - Add new candidates
-   - Edit candidate information
-   - View vote counts
-
-4. **Monitor Elections**
-   - Start/pause/end elections
-   - View live results
-   - Monitor blockchain activity
-
-## 🔧 Technical Details
-
-### Architecture
-- **Frontend:** Vanilla JavaScript, HTML5, CSS3
+- **Frontend:** Vanilla JavaScript, CSS3, HTML5
 - **Backend:** Node.js, Express.js
-- **Email Service:** Nodemailer with Gmail SMTP
-- **Storage:** LocalStorage (demo), easily upgradeable to database
-- **Camera API:** WebRTC getUserMedia API
+- **Email:** Nodemailer with Gmail SMTP
+- **Storage:** In-memory (upgrade to database for production)
+- **Security:** OTP verification, Face recognition simulation
 
-### Security Features
-- **OTP Expiration:** 2-minute timeout
-- **Email Verification:** Real SMTP integration
-- **Biometric Verification:** Face photo capture and comparison
-- **Blockchain Simulation:** Immutable vote recording
-- **Data Validation:** Input sanitization and validation
+## API Endpoints
 
-### API Endpoints
+### User APIs
 - `POST /api/send-otp` - Send OTP to email
 - `POST /api/verify-otp` - Verify OTP code
-- `GET /api/health` - Server health check
+- `POST /api/check-user` - Check user registration status
+- `POST /api/complete-registration` - Complete user registration
 
-## 🌐 Deployment
+### Admin APIs
+- `GET /api/admin/registrations` - Get all registrations
+- `GET /api/admin/stats` - Get registration statistics
+- `POST /api/admin/approve/:id` - Approve registration
+- `POST /api/admin/reject/:id` - Reject registration
+
+## Deployment
 
 ### Local Development
 ```bash
-npm run dev  # Uses nodemon for auto-restart
+npm run dev
 ```
 
 ### Production Deployment
-1. Set environment variables on your hosting platform
-2. Install dependencies: `npm install --production`
-3. Start server: `npm start`
+1. Set environment variables
+2. Use process manager like PM2
+3. Configure reverse proxy (Nginx)
+4. Enable HTTPS
 
-### Recommended Hosting
-- **Heroku:** Easy deployment with environment variables
-- **Vercel:** Serverless deployment
-- **DigitalOcean:** VPS hosting
-- **AWS EC2:** Scalable cloud hosting
+## Security Features
 
-## 📊 Demo Data
+- Email-based OTP authentication
+- Face recognition for vote casting
+- Admin approval for all registrations
+- Blockchain vote immutability
+- Input validation and sanitization
 
-The system includes sample data for testing:
-
-### Test Candidates
-- Alice Johnson (Democratic Party)
-- Robert Smith (Republican Party)  
-- Maria Garcia (Independent)
-
-### Sample Workflow
-1. Register with any email address
-2. Use real OTP sent to your email
-3. Capture photos using your device camera
-4. Vote for any candidate
-5. View results in admin panel
-
-## 🔒 Security Considerations
-
-### Production Recommendations
-- Use HTTPS for all communications
-- Implement rate limiting for OTP requests
-- Add CAPTCHA for bot prevention
-- Use proper database with encryption
-- Implement JWT tokens for session management
-- Add audit logging for all actions
-
-### Privacy Features
-- Photos stored locally (can be encrypted)
-- Email addresses hashed in production
-- Blockchain ensures vote anonymity
-- No personal data in vote records
-
-## 🤝 Contributing
+## Contributing
 
 1. Fork the repository
-2. Create feature branch
-3. Make changes
-4. Test thoroughly
-5. Submit pull request
+2. Create feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit changes (`git commit -m 'Add amazing feature'`)
+4. Push to branch (`git push origin feature/amazing-feature`)
+5. Open Pull Request
 
-## 📄 License
+## License
 
-MIT License - feel free to use for educational and commercial purposes.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## 🆘 Support
+## Support
 
-For issues and questions:
-- Check the console for error messages
-- Ensure camera permissions are granted
-- Verify email credentials in `.env`
-- Test with different browsers if needed
-
-## 🔮 Future Enhancements
-
-- Real blockchain integration (Ethereum, Hyperledger)
-- Advanced biometric verification (fingerprint, iris)
-- Mobile app development
-- Multi-factor authentication
-- Advanced analytics and reporting
-- Integration with government ID systems
-- Scalable database architecture
-- Real-time notifications
+For support, email team@securevote.com or create an issue on GitHub.
 
 ---
 
-**SecureVote** - Making democracy more secure, transparent, and accessible through blockchain technology.
+**SecureVote Team** - Building the future of secure digital democracy
