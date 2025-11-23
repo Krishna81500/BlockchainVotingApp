@@ -8,33 +8,13 @@
   ],
   "routes": [
     {
-      "src": "/api/(.*)",
+      "src": "/(.*)",
       "dest": "/server.js"
-    },
-    {
-      "src": "/votingapp/(.*)",
-      "dest": "/votingapp/$1"
-    },
-    {
-      "src": "/admin/(.*)",
-      "dest": "/admin/$1"
-    },
-    {
-      "src": "/votingapp",
-      "dest": "/votingapp/index.html"
-    },
-    {
-      "src": "/admin",
-      "dest": "/admin/index.html"
-    },
-    {
-      "src": "/",
-      "dest": "/index.html"
     }
   ],
   "env": {
     "EMAIL_USER": "@email_user",
     "EMAIL_PASS": "@email_pass",
-    "PORT": "3003"
+    "PORT": "3000"
   }
 }
