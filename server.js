@@ -19,7 +19,7 @@ app.use('/votingapp', express.static(path.join(__dirname, 'votingapp')));
 app.use('/admin', express.static(path.join(__dirname, 'admin')));
 
 // Email transporter setup
-const transporter = nodemailer.createTransporter({
+const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
         user: process.env.EMAIL_USER,
