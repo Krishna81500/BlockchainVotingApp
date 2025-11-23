@@ -19,7 +19,7 @@ function showVotingScreen() { showScreen('votingScreen'); }
 function showResultsScreen() { showScreen('resultsScreen'); }
 function showBlockchainScreen() { showScreen('blockchainScreen'); }
 
-// Fixed OTP Functions
+// Real SMTP OTP Functions
 async function sendLoginOTP() {
     const email = document.getElementById('loginEmail').value;
     if (!email || !isValidEmail(email)) {
@@ -28,37 +28,29 @@ async function sendLoginOTP() {
     }
 
     try {
-        // Generate OTP locally for demo (since server might not be running)
-        const otp = generateOTP();
+        const response = await fetch('/api/send-otp', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email, type: 'login' })
+        });
         
-        // Try server first, fallback to local
-        try {
-            const response = await fetch('/api/send-otp', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ email, type: 'login' })
-            });
+        const result = await response.json();
+        
+        if (response.ok) {
+            alert(`OTP sent to ${email}\nCheck your email inbox for the verification code`);
             
-            if (response.ok) {
-                alert(`OTP sent to ${email}\nCheck your email for the code`);
-            } else {
-                throw new Error('Server not available');
-            }
-        } catch (serverError) {
-            // Fallback: Use demo OTP
-            sessionStorage.setItem('loginOTP', '123456');
-            alert(`Demo Mode: OTP sent to ${email}\nUse OTP: 123456`);
+            document.getElementById('loginOtpSection').style.display = 'block';
+            document.getElementById('loginSubmitBtn').innerHTML = '<i class="fas fa-key"></i> Verify OTP';
+            document.getElementById('loginSubmitBtn').onclick = verifyLoginOTP;
+            
+            sessionStorage.setItem('loginEmail', email);
+            startOTPTimer('loginOtpTimer', 'loginResendOtp', 120);
+        } else {
+            alert(result.error || 'Failed to send OTP. Please ensure server is running.');
         }
         
-        document.getElementById('loginOtpSection').style.display = 'block';
-        document.getElementById('loginSubmitBtn').innerHTML = '<i class="fas fa-key"></i> Verify OTP';
-        document.getElementById('loginSubmitBtn').onclick = verifyLoginOTP;
-        
-        sessionStorage.setItem('loginEmail', email);
-        startOTPTimer('loginOtpTimer', 'loginResendOtp', 120);
-        
     } catch (error) {
-        alert('Failed to send OTP. Please try again.');
+        alert('Server connection failed. Please start the server with: npm start');
         console.error('OTP Error:', error);
     }
 }
@@ -73,32 +65,22 @@ async function verifyLoginOTP() {
     }
     
     try {
-        // Try server verification first
         const response = await fetch('/api/verify-otp', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ email, otp: enteredOTP })
         });
         
+        const result = await response.json();
+        
         if (response.ok) {
             loginSuccess(email);
         } else {
-            // Fallback to demo OTP
-            const demoOTP = sessionStorage.getItem('loginOTP');
-            if (enteredOTP === demoOTP || enteredOTP === '123456') {
-                loginSuccess(email);
-            } else {
-                alert('Invalid OTP. Try: 123456');
-            }
+            alert(result.error || 'Invalid OTP. Please check your email and try again.');
         }
     } catch (error) {
-        // Fallback verification
-        const demoOTP = sessionStorage.getItem('loginOTP');
-        if (enteredOTP === demoOTP || enteredOTP === '123456') {
-            loginSuccess(email);
-        } else {
-            alert('Invalid OTP. Try: 123456');
-        }
+        alert('Server connection failed. Please ensure server is running.');
+        console.error('OTP Verification Error:', error);
     }
 }
 
@@ -135,37 +117,32 @@ async function sendRegOTP() {
     }
 
     try {
-        // Try server first, fallback to demo
-        try {
-            const response = await fetch('/api/send-otp', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ email, type: 'registration' })
-            });
+        const response = await fetch('/api/send-otp', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email, type: 'registration' })
+        });
+        
+        const result = await response.json();
+        
+        if (response.ok) {
+            alert(`Registration OTP sent to ${email}\nCheck your email inbox for the verification code`);
             
-            if (response.ok) {
-                alert(`OTP sent to ${email}\nCheck your email for the code`);
-            } else {
-                throw new Error('Server not available');
-            }
-        } catch (serverError) {
-            // Fallback: Use demo OTP
-            sessionStorage.setItem('regOTP', '123456');
-            alert(`Demo Mode: OTP sent to ${email}\nUse OTP: 123456`);
+            document.getElementById('regOtpSection').style.display = 'block';
+            document.getElementById('registerBtn').innerHTML = '<i class="fas fa-check"></i> Complete Registration';
+            document.getElementById('registerBtn').onclick = completeRegistration;
+            
+            startOTPTimer('regOtpTimer', 'regResendOtp', 120);
+            
+            sessionStorage.setItem('regData', JSON.stringify({
+                name, aadhaar, email, phone, aadhaarPhoto, facePhoto
+            }));
+        } else {
+            alert(result.error || 'Failed to send OTP. Please ensure server is running.');
         }
         
-        document.getElementById('regOtpSection').style.display = 'block';
-        document.getElementById('registerBtn').innerHTML = '<i class="fas fa-check"></i> Complete Registration';
-        document.getElementById('registerBtn').onclick = completeRegistration;
-        
-        startOTPTimer('regOtpTimer', 'regResendOtp', 120);
-        
-        sessionStorage.setItem('regData', JSON.stringify({
-            name, aadhaar, email, phone, aadhaarPhoto, facePhoto
-        }));
-        
     } catch (error) {
-        alert('Failed to send OTP. Please try again.');
+        alert('Server connection failed. Please start the server with: npm start');
         console.error('Registration OTP Error:', error);
     }
 }
@@ -180,32 +157,22 @@ async function completeRegistration() {
     }
     
     try {
-        // Try server verification first
         const response = await fetch('/api/verify-otp', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ email: regData.email, otp: enteredOTP })
         });
         
+        const result = await response.json();
+        
         if (response.ok) {
             registrationSuccess(regData);
         } else {
-            // Fallback to demo OTP
-            const demoOTP = sessionStorage.getItem('regOTP');
-            if (enteredOTP === demoOTP || enteredOTP === '123456') {
-                registrationSuccess(regData);
-            } else {
-                alert('Invalid OTP. Try: 123456');
-            }
+            alert(result.error || 'Invalid OTP. Please check your email and try again.');
         }
     } catch (error) {
-        // Fallback verification
-        const demoOTP = sessionStorage.getItem('regOTP');
-        if (enteredOTP === demoOTP || enteredOTP === '123456') {
-            registrationSuccess(regData);
-        } else {
-            alert('Invalid OTP. Try: 123456');
-        }
+        alert('Server connection failed. Please ensure server is running.');
+        console.error('OTP Verification Error:', error);
     }
 }
 
