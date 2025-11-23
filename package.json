@@ -1,6 +1,6 @@
 {
   "name": "securevote-blockchain-voting",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "Blockchain-based voting system with real OTP authentication and biometric verification",
   "main": "server.js",
   "scripts": {

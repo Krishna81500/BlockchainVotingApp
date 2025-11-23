@@ -172,9 +172,10 @@ setInterval(() => {
 }, 60000);
 
 app.listen(PORT, () => {
-    console.log(`🚀 SecureVote Server running on http://localhost:${PORT}`);
+    console.log(`🚀 SecureVote Server v2.0 - Real SMTP OTP running on http://localhost:${PORT}`);
     console.log(`📱 Voting App: http://localhost:${PORT}/votingapp`);
     console.log(`⚙️  Admin Panel: http://localhost:${PORT}/admin`);
+    console.log(`📧 Real OTP System: ACTIVE`);
 });
 
 module.exports = app;
