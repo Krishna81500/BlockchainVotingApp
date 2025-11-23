@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login - SecureVote</title>
+    <link rel="stylesheet" href="admin-styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-card">
+            <div class="login-header">
+                <i class="fas fa-shield-alt"></i>
+                <h1>Admin Access</h1>
+                <p>SecureVote Administration Panel</p>
+            </div>
+
+            <div class="login-tabs">
+                <button class="tab-btn active" onclick="switchTab('login')">Login</button>
+                <button class="tab-btn" onclick="switchTab('register')">Register</button>
+            </div>
+
+            <!-- Login Form -->
+            <form id="loginForm" class="auth-form">
+                <div class="form-group">
+                    <label for="loginOfficialId">Official ID Number</label>
+                    <input type="text" id="loginOfficialId" required placeholder="Enter your official ID">
+                </div>
+                <div class="form-group">
+                    <label for="loginEmail">Email Address</label>
+                    <input type="email" id="loginEmail" required placeholder="Enter your email">
+                </div>
+                <div class="form-group">
+                    <label for="loginPassword">Password</label>
+                    <input type="password" id="loginPassword" required placeholder="Enter your password">
+                </div>
+                <button type="submit" class="auth-btn">
+                    <i class="fas fa-sign-in-alt"></i>
+                    Login to Admin Panel
+                </button>
+            </form>
+
+            <!-- Register Form -->
+            <form id="registerForm" class="auth-form" style="display: none;">
+                <div class="form-group">
+                    <label for="regOfficialId">Official ID Number</label>
+                    <input type="text" id="regOfficialId" required placeholder="Government issued ID">
+                </div>
+                <div class="form-group">
+                    <label for="regName">Full Name</label>
+                    <input type="text" id="regName" required placeholder="Enter your full name">
+                </div>
+                <div class="form-group">
+                    <label for="regEmail">Email Address</label>
+                    <input type="email" id="regEmail" required placeholder="Enter your email">
+                </div>
+                <div class="form-group">
+                    <label for="regPhone">Phone Number</label>
+                    <input type="tel" id="regPhone" required placeholder="Enter your phone number">
+                </div>
+                <div class="form-group">
+                    <label for="regDepartment">Department</label>
+                    <select id="regDepartment" required>
+                        <option value="">Select Department</option>
+                        <option value="election-commission">Election Commission</option>
+                        <option value="government">Government Official</option>
+                        <option value="security">Security Department</option>
+                        <option value="it-admin">IT Administration</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="regDesignation">Designation</label>
+                    <input type="text" id="regDesignation" required placeholder="Your official designation">
+                </div>
+                <div class="form-group">
+                    <label for="regPassword">Password</label>
+                    <input type="password" id="regPassword" required placeholder="Create a password">
+                </div>
+                <div class="form-group">
+                    <label for="regConfirmPassword">Confirm Password</label>
+                    <input type="password" id="regConfirmPassword" required placeholder="Confirm your password">
+                </div>
+                <button type="submit" class="auth-btn">
+                    <i class="fas fa-user-plus"></i>
+                    Register Admin Account
+                </button>
+            </form>
+
+            <div class="login-footer">
+                <a href="/">← Back to Voting Portal</a>
+            </div>
+        </div>
+    </div>
+
+    <div id="loadingOverlay" class="loading-overlay" style="display: none;">
+        <div class="loading-spinner">
+            <i class="fas fa-spinner fa-spin"></i>
+            <p>Processing...</p>
+        </div>
+    </div>
+
+    <script src="admin-auth.js"></script>
+</body>
+</html>

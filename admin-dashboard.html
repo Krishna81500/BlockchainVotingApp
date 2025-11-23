@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - SecureVote</title>
+    <link rel="stylesheet" href="admin-styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="admin-container">
+        <header class="admin-header">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-shield-alt"></i>
+                    <span>SecureVote Admin</span>
+                </div>
+                <div class="admin-info">
+                    <span id="adminName">Admin Panel</span>
+                    <button class="logout-btn" onclick="logout()">
+                        <i class="fas fa-sign-out-alt"></i>
+                        Logout
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <nav class="admin-nav">
+            <button class="nav-btn active" onclick="showSection('dashboard')">
+                <i class="fas fa-tachometer-alt"></i> Dashboard
+            </button>
+            <button class="nav-btn" onclick="showSection('elections')">
+                <i class="fas fa-calendar-alt"></i> Elections
+            </button>
+            <button class="nav-btn" onclick="showSection('candidates')">
+                <i class="fas fa-users"></i> Candidates
+            </button>
+            <button class="nav-btn" onclick="showSection('registrations')">
+                <i class="fas fa-user-check"></i> User Registrations
+            </button>
+            <button class="nav-btn" onclick="showSection('results')">
+                <i class="fas fa-chart-bar"></i> Results
+            </button>
+        </nav>
+
+        <main class="admin-main">
+            <!-- Dashboard Section -->
+            <div id="dashboard" class="admin-section active">
+                <h2>Dashboard Overview</h2>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <i class="fas fa-vote-yea"></i>
+                        <div class="stat-info">
+                            <span class="stat-value" id="activeElections">0</span>
+                            <span class="stat-label">Active Elections</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-users"></i>
+                        <div class="stat-info">
+                            <span class="stat-value" id="totalCandidates">0</span>
+                            <span class="stat-label">Total Candidates</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-user-check"></i>
+                        <div class="stat-info">
+                            <span class="stat-value" id="approvedVoters">0</span>
+                            <span class="stat-label">Approved Voters</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-clock"></i>
+                        <div class="stat-info">
+                            <span class="stat-value" id="pendingApprovals">0</span>
+                            <span class="stat-label">Pending Approvals</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Elections Section -->
+            <div id="elections" class="admin-section">
+                <div class="section-header">
+                    <h2>Election Management</h2>
+                    <button class="btn btn-primary" onclick="showCreateElection()">
+                        <i class="fas fa-plus"></i> Create Election
+                    </button>
+                </div>
+                
+                <div id="electionsList" class="elections-list">
+                    <!-- Elections will be loaded here -->
+                </div>
+
+                <!-- Create Election Modal -->
+                <div id="createElectionModal" class="modal" style="display: none;">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h3>Create New Election</h3>
+                            <button class="close-btn" onclick="hideCreateElection()">&times;</button>
+                        </div>
+                        <form id="createElectionForm">
+                            <div class="form-group">
+                                <label for="electionTitle">Election Title</label>
+                                <input type="text" id="electionTitle" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="electionDescription">Description</label>
+                                <textarea id="electionDescription" rows="3"></textarea>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="startDate">Start Date</label>
+                                    <input type="datetime-local" id="startDate" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="endDate">End Date</label>
+                                    <input type="datetime-local" id="endDate" required>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="electionType">Election Type</label>
+                                <select id="electionType" required>
+                                    <option value="">Select Type</option>
+                                    <option value="general">General Election</option>
+                                    <option value="local">Local Election</option>
+                                    <option value="referendum">Referendum</option>
+                                    <option value="special">Special Election</option>
+                                </select>
+                            </div>
+                            <div class="modal-actions">
+                                <button type="button" class="btn btn-secondary" onclick="hideCreateElection()">Cancel</button>
+                                <button type="submit" class="btn btn-primary">Create Election</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Candidates Section -->
+            <div id="candidates" class="admin-section">
+                <div class="section-header">
+                    <h2>Candidate Management</h2>
+                    <div class="header-actions">
+                        <button class="btn btn-secondary" onclick="showBulkAdd()">
+                            <i class="fas fa-users"></i> Add Multiple
+                        </button>
+                        <button class="btn btn-primary" onclick="showAddCandidate()">
+                            <i class="fas fa-user-plus"></i> Add Single
+                        </button>
+                    </div>
+                </div>
+
+                <div class="election-selector">
+                    <label for="candidateElectionSelect">Select Election:</label>
+                    <select id="candidateElectionSelect" onchange="loadCandidates()">
+                        <option value="">Choose an election</option>
+                    </select>
+                </div>
+
+                <div class="candidate-count-section">
+                    <div class="count-controls">
+                        <label for="candidateCount">Number of Candidates:</label>
+                        <input type="number" id="candidateCount" min="1" max="20" value="1" onchange="updateCandidateCount()">
+                        <button class="btn btn-secondary" onclick="generateCandidateFields()">Generate Fields</button>
+                    </div>
+                </div>
+
+                <div id="candidatesList" class="candidates-list">
+                    <!-- Candidates will be loaded here -->
+                </div>
+
+                <!-- Bulk Add Candidates Modal -->
+                <div id="bulkAddModal" class="modal" style="display: none;">
+                    <div class="modal-content" style="max-width: 800px; max-height: 90vh; overflow-y: auto;">
+                        <div class="modal-header">
+                            <h3>Add Multiple Candidates</h3>
+                            <button class="close-btn" onclick="hideBulkAdd()">&times;</button>
+                        </div>
+                        <form id="bulkAddForm">
+                            <div class="form-group">
+                                <label for="bulkElection">Election</label>
+                                <select id="bulkElection" required>
+                                    <option value="">Select Election</option>
+                                </select>
+                            </div>
+                            <div id="candidateFields">
+                                <!-- Dynamic candidate fields will be generated here -->
+                            </div>
+                            <div class="modal-actions">
+                                <button type="button" class="btn btn-secondary" onclick="hideBulkAdd()">Cancel</button>
+                                <button type="submit" class="btn btn-primary">Add All Candidates</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Single Add Candidate Modal -->
+                <div id="addCandidateModal" class="modal" style="display: none;">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h3>Add New Candidate</h3>
+                            <button class="close-btn" onclick="hideAddCandidate()">&times;</button>
+                        </div>
+                        <form id="addCandidateForm">
+                            <div class="form-group">
+                                <label for="candidateElection">Election</label>
+                                <select id="candidateElection" required>
+                                    <option value="">Select Election</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="candidateName">Candidate Name</label>
+                                <input type="text" id="candidateName" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="candidateParty">Party/Affiliation</label>
+                                <input type="text" id="candidateParty" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="candidateAge">Age</label>
+                                <input type="number" id="candidateAge" min="18" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="candidateQualification">Qualification</label>
+                                <input type="text" id="candidateQualification" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="candidateManifesto">Manifesto/Platform</label>
+                                <textarea id="candidateManifesto" rows="4"></textarea>
+                            </div>
+                            <div class="modal-actions">
+                                <button type="button" class="btn btn-secondary" onclick="hideAddCandidate()">Cancel</button>
+                                <button type="submit" class="btn btn-primary">Add Candidate</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- User Registrations Section -->
+            <div id="registrations" class="admin-section">
+                <h2>User Registrations</h2>
+                <div class="filter-tabs">
+                    <button class="tab-btn active" onclick="filterRegistrations('all')">All</button>
+                    <button class="tab-btn" onclick="filterRegistrations('pending')">Pending</button>
+                    <button class="tab-btn" onclick="filterRegistrations('approved')">Approved</button>
+                    <button class="tab-btn" onclick="filterRegistrations('rejected')">Rejected</button>
+                </div>
+                <div class="registrations-list" id="registrationsList">
+                    <!-- Registration items will be loaded here -->
+                </div>
+            </div>
+
+            <!-- Results Section -->
+            <div id="results" class="admin-section">
+                <h2>Election Results</h2>
+                <div class="election-selector">
+                    <label for="resultsElectionSelect">Select Election:</label>
+                    <select id="resultsElectionSelect" onchange="loadResults()">
+                        <option value="">Choose an election</option>
+                    </select>
+                </div>
+                <div id="resultsList" class="results-list">
+                    <!-- Results will be loaded here -->
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="admin-dashboard.js"></script>
+</body>
+</html>

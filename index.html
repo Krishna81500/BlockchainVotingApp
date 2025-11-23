@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SecureVote - Blockchain Voting System</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="mobile-container">
+        <header class="app-header">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-vote-yea"></i>
+                    <span>SecureVote</span>
+                </div>
+                <div class="header-controls">
+                    <div class="language-buttons">
+                        <button class="lang-btn active" onclick="changeLanguage('en')" data-lang="en">EN</button>
+                        <button class="lang-btn" onclick="changeLanguage('hi')" data-lang="hi">हि</button>
+                        <button class="lang-btn" onclick="changeLanguage('kn')" data-lang="kn">ಕನ್ನ</button>
+                    </div>
+                    <div class="settings-menu">
+                        <button class="settings-btn" onclick="toggleSettingsMenu()">
+                            <i class="fas fa-ellipsis-v"></i>
+                        </button>
+                        <div class="settings-dropdown" id="settingsDropdown">
+                            <div class="settings-item" onclick="showProfile()">
+                                <i class="fas fa-user"></i>
+                                <span>Profile</span>
+                            </div>
+                            <div class="settings-item" onclick="logout()" id="logoutBtn" style="display: none;">
+                                <i class="fas fa-sign-out-alt"></i>
+                                <span>Logout</span>
+                            </div>
+                            <div class="settings-item" onclick="showLoginScreen()" id="loginBtn">
+                                <i class="fas fa-sign-in-alt"></i>
+                                <span>Login</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <main class="main-content">
+            <!-- Home Screen -->
+            <div id="homeScreen" class="screen active">
+                <div class="home-container">
+                    <div class="welcome-section">
+                        <div class="app-logo">
+                            <i class="fas fa-vote-yea"></i>
+                        </div>
+                        <h1>Welcome to SecureVote</h1>
+                        <p>Secure, Transparent, Immutable Voting</p>
+                        <p class="tagline">Your vote, Your voice, Secured by Blockchain</p>
+                    </div>
+                    
+                    <div class="auth-options">
+                        <button class="btn-primary" onclick="showLoginScreen()">
+                            <i class="fas fa-sign-in-alt"></i>
+                            Login to Vote
+                        </button>
+                        
+                        <button class="btn-secondary" onclick="showRegisterScreen()">
+                            <i class="fas fa-user-plus"></i>
+                            Register as New Voter
+                        </button>
+                    </div>
+                    
+                    <div class="blockchain-info">
+                        <div class="info-item">
+                            <i class="fas fa-cube"></i>
+                            <span>Block Height: <span id="blockHeight">12,847</span></span>
+                        </div>
+                        <div class="info-item">
+                            <i class="fas fa-users"></i>
+                            <span>Total Voters: <span id="totalVoters">1,247</span></span>
+                        </div>
+                        <div class="info-item">
+                            <i class="fas fa-shield-check"></i>
+                            <span>Blockchain Secured</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Login Screen -->
+            <div id="loginScreen" class="screen">
+                <div class="login-container">
+                    <div class="screen-header">
+                        <button class="back-btn" onclick="showHomeScreen()">
+                            <i class="fas fa-arrow-left"></i>
+                        </button>
+                        <h2>Voter Login</h2>
+                    </div>
+                    
+                    <div class="auth-form">
+                        <div class="input-group">
+                            <i class="fas fa-envelope"></i>
+                            <input type="email" id="loginEmail" placeholder="Enter your email address" required>
+                        </div>
+                        
+                        <div class="otp-section" id="loginOtpSection" style="display: none;">
+                            <div class="input-group">
+                                <i class="fas fa-key"></i>
+                                <input type="text" id="loginOtpCode" placeholder="Enter 6-digit OTP" maxlength="6" required>
+                            </div>
+                            <div class="otp-timer">
+                                <span>OTP expires in: <span id="loginOtpTimer">120</span>s</span>
+                                <button class="resend-btn" id="loginResendOtp" onclick="resendLoginOTP()" disabled>
+                                    Resend OTP
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <button class="btn-primary" id="loginSubmitBtn" onclick="sendLoginOTP()">
+                            <i class="fas fa-paper-plane"></i>
+                            Send OTP
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Registration Screen -->
+            <div id="registerScreen" class="screen">
+                <div class="register-container">
+                    <div class="screen-header">
+                        <button class="back-btn" onclick="showHomeScreen()">
+                            <i class="fas fa-arrow-left"></i>
+                        </button>
+                        <h2>Voter Registration</h2>
+                    </div>
+                    
+                    <div class="registration-form">
+                        <div class="input-group">
+                            <i class="fas fa-user"></i>
+                            <input type="text" id="fullName" placeholder="Full Name" required>
+                        </div>
+                        
+                        <div class="input-group">
+                            <i class="fas fa-id-card"></i>
+                            <input type="text" id="aadhaarNumber" placeholder="Aadhaar Number (12 digits)" maxlength="14" required>
+                        </div>
+                        
+                        <div class="input-group">
+                            <i class="fas fa-envelope"></i>
+                            <input type="email" id="regEmail" placeholder="Email Address" required>
+                        </div>
+                        
+                        <div class="input-group">
+                            <i class="fas fa-mobile-alt"></i>
+                            <input type="tel" id="regPhone" placeholder="Mobile Number" required>
+                        </div>
+                        
+                        <!-- Aadhaar Photo Capture -->
+                        <div class="photo-section">
+                            <h4><i class="fas fa-id-card"></i> Aadhaar Card Photo</h4>
+                            <div class="photo-capture">
+                                <video id="aadhaarVideo" style="display: none;" autoplay muted></video>
+                                <canvas id="aadhaarCanvas" style="display: none;"></canvas>
+                                <div id="aadhaarPreview" style="display: none;">
+                                    <img id="aadhaarImg" style="max-width: 200px; border-radius: 8px;">
+                                    <p>Aadhaar photo captured</p>
+                                </div>
+                                <button class="btn-secondary" id="captureAadhaarBtn" onclick="captureAadhaar()">
+                                    <i class="fas fa-camera"></i>
+                                    Capture Aadhaar Card
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- Face Photo Capture -->
+                        <div class="photo-section">
+                            <h4><i class="fas fa-user"></i> Face Photo</h4>
+                            <div class="photo-capture">
+                                <video id="faceVideo" style="display: none;" autoplay muted></video>
+                                <canvas id="faceCanvas" style="display: none;"></canvas>
+                                <div id="facePreview" style="display: none;">
+                                    <img id="faceImg" style="max-width: 150px; border-radius: 50%;">
+                                    <p>Face photo captured</p>
+                                </div>
+                                <button class="btn-secondary" id="captureFaceBtn" onclick="captureFace()">
+                                    <i class="fas fa-camera"></i>
+                                    Capture Face Photo
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="otp-section" id="regOtpSection" style="display: none;">
+                            <div class="input-group">
+                                <i class="fas fa-key"></i>
+                                <input type="text" id="regOtpCode" placeholder="Enter 6-digit OTP" maxlength="6" required>
+                            </div>
+                            <div class="otp-timer">
+                                <span>OTP expires in: <span id="regOtpTimer">120</span>s</span>
+                                <button class="resend-btn" id="regResendOtp" onclick="resendRegOTP()" disabled>
+                                    Resend OTP
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <button class="btn-primary" id="registerBtn" onclick="sendRegOTP()">
+                            <i class="fas fa-paper-plane"></i>
+                            Send OTP to Register
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Dashboard Screen -->
+            <div id="dashboardScreen" class="screen">
+                <div class="dashboard-container">
+                    <div class="user-info">
+                        <div class="avatar">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <div class="user-details">
+                            <h3 id="userName">Verified User</h3>
+                            <p id="userConstituency">Constituency: Central District</p>
+                            <span class="verification-badge">
+                                <i class="fas fa-check-circle"></i>
+                                Verified Voter
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="quick-actions">
+                        <button class="action-btn" onclick="showVotingScreen()">
+                            <i class="fas fa-vote-yea"></i>
+                            <span>Cast Vote</span>
+                        </button>
+                        
+                        <button class="action-btn" onclick="showResultsScreen()">
+                            <i class="fas fa-chart-bar"></i>
+                            <span>Live Results</span>
+                        </button>
+                        
+                        <button class="action-btn" onclick="showBlockchainScreen()">
+                            <i class="fas fa-cubes"></i>
+                            <span>Blockchain</span>
+                        </button>
+                        
+                        <button class="action-btn" onclick="showProfile()">
+                            <i class="fas fa-user"></i>
+                            <span>Profile</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Voting Screen -->
+            <div id="votingScreen" class="screen">
+                <div class="voting-container">
+                    <div class="voting-header">
+                        <button class="back-btn" onclick="showDashboard()">
+                            <i class="fas fa-arrow-left"></i>
+                        </button>
+                        <h2>Cast Your Vote</h2>
+                    </div>
+
+                    <div class="candidates-list">
+                        <div class="candidate-card" onclick="selectCandidate(1)">
+                            <div class="candidate-info">
+                                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=60&h=60&fit=crop&crop=face" alt="Candidate 1">
+                                <div class="candidate-details">
+                                    <h4>Alice Johnson</h4>
+                                    <p>Democratic Party</p>
+                                </div>
+                            </div>
+                            <div class="vote-checkbox">
+                                <i class="fas fa-circle"></i>
+                            </div>
+                        </div>
+
+                        <div class="candidate-card" onclick="selectCandidate(2)">
+                            <div class="candidate-info">
+                                <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=60&h=60&fit=crop&crop=face" alt="Candidate 2">
+                                <div class="candidate-details">
+                                    <h4>Robert Smith</h4>
+                                    <p>Republican Party</p>
+                                </div>
+                            </div>
+                            <div class="vote-checkbox">
+                                <i class="fas fa-circle"></i>
+                            </div>
+                        </div>
+
+                        <div class="candidate-card" onclick="selectCandidate(3)">
+                            <div class="candidate-info">
+                                <img src="https://images.unsplash.com/photo-1494790108755-2616b612b786?w=60&h=60&fit=crop&crop=face" alt="Candidate 3">
+                                <div class="candidate-details">
+                                    <h4>Maria Garcia</h4>
+                                    <p>Independent</p>
+                                </div>
+                            </div>
+                            <div class="vote-checkbox">
+                                <i class="fas fa-circle"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="vote-actions">
+                        <button class="btn-secondary" onclick="showDashboard()">Cancel</button>
+                        <button class="btn-primary" id="submitVoteBtn" onclick="submitVote()" disabled>
+                            <i class="fas fa-lock"></i>
+                            Submit Vote
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Results Screen -->
+            <div id="resultsScreen" class="screen">
+                <div class="results-container">
+                    <div class="results-header">
+                        <button class="back-btn" onclick="showDashboard()">
+                            <i class="fas fa-arrow-left"></i>
+                        </button>
+                        <h2>Live Results</h2>
+                    </div>
+
+                    <div class="results-summary">
+                        <div class="summary-card">
+                            <h4>Total Votes</h4>
+                            <span class="count">8,547</span>
+                        </div>
+                        <div class="summary-card">
+                            <h4>Turnout</h4>
+                            <span class="percentage">68.5%</span>
+                        </div>
+                    </div>
+
+                    <div class="results-list">
+                        <div class="result-item">
+                            <div class="candidate-result">
+                                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=50&h=50&fit=crop&crop=face" alt="Alice Johnson">
+                                <div class="result-info">
+                                    <h4>Alice Johnson</h4>
+                                    <p>Democratic Party</p>
+                                </div>
+                            </div>
+                            <div class="vote-stats">
+                                <div class="progress-bar">
+                                    <div class="progress" style="width: 45%"></div>
+                                </div>
+                                <span class="vote-count">3,846 votes (45%)</span>
+                            </div>
+                        </div>
+
+                        <div class="result-item">
+                            <div class="candidate-result">
+                                <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=50&h=50&fit=crop&crop=face" alt="Robert Smith">
+                                <div class="result-info">
+                                    <h4>Robert Smith</h4>
+                                    <p>Republican Party</p>
+                                </div>
+                            </div>
+                            <div class="vote-stats">
+                                <div class="progress-bar">
+                                    <div class="progress" style="width: 38%"></div>
+                                </div>
+                                <span class="vote-count">3,248 votes (38%)</span>
+                            </div>
+                        </div>
+
+                        <div class="result-item">
+                            <div class="candidate-result">
+                                <img src="https://images.unsplash.com/photo-1494790108755-2616b612b786?w=50&h=50&fit=crop&crop=face" alt="Maria Garcia">
+                                <div class="result-info">
+                                    <h4>Maria Garcia</h4>
+                                    <p>Independent</p>
+                                </div>
+                            </div>
+                            <div class="vote-stats">
+                                <div class="progress-bar">
+                                    <div class="progress" style="width: 17%"></div>
+                                </div>
+                                <span class="vote-count">1,453 votes (17%)</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Blockchain Screen -->
+            <div id="blockchainScreen" class="screen">
+                <div class="blockchain-container">
+                    <div class="blockchain-header">
+                        <button class="back-btn" onclick="showDashboard()">
+                            <i class="fas fa-arrow-left"></i>
+                        </button>
+                        <h2>Blockchain Explorer</h2>
+                    </div>
+
+                    <div class="blockchain-stats">
+                        <div class="stat-card">
+                            <i class="fas fa-cube"></i>
+                            <div class="stat-info">
+                                <span class="stat-value">12,847</span>
+                                <span class="stat-label">Current Block</span>
+                            </div>
+                        </div>
+                        
+                        <div class="stat-card">
+                            <i class="fas fa-clock"></i>
+                            <div class="stat-info">
+                                <span class="stat-value">15s</span>
+                                <span class="stat-label">Block Time</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="recent-blocks">
+                        <h3>Recent Blocks</h3>
+                        <div class="block-list">
+                            <div class="block-item">
+                                <div class="block-info">
+                                    <span class="block-number">#12847</span>
+                                    <span class="block-hash">0x7a8f...9c2d</span>
+                                </div>
+                                <div class="block-details">
+                                    <span class="transaction-count">23 votes</span>
+                                    <span class="block-time">2 min ago</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Bottom Navigation -->
+        <nav class="bottom-nav">
+            <button class="nav-item active" onclick="showDashboard()">
+                <i class="fas fa-home"></i>
+                <span>Home</span>
+            </button>
+            
+            <button class="nav-item" onclick="showVotingScreen()">
+                <i class="fas fa-vote-yea"></i>
+                <span>Vote</span>
+            </button>
+            
+            <button class="nav-item" onclick="showResultsScreen()">
+                <i class="fas fa-chart-bar"></i>
+                <span>Results</span>
+            </button>
+            
+            <button class="nav-item" onclick="showBlockchainScreen()">
+                <i class="fas fa-cubes"></i>
+                <span>Blockchain</span>
+            </button>
+        </nav>
+    </div>
+
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SecureVote Admin Panel</title>
+    <link rel="stylesheet" href="admin-styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="admin-container">
+        <header class="admin-header">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-shield-alt"></i>
+                    <span>SecureVote Admin</span>
+                </div>
+                <div class="admin-info">
+                    <span>Admin Panel</span>
+                    <button class="logout-btn" onclick="logout()">
+                        <i class="fas fa-sign-out-alt"></i>
+                        Logout
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <main class="admin-main">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <i class="fas fa-users"></i>
+                    <div class="stat-info">
+                        <span class="stat-value" id="totalUsers">0</span>
+                        <span class="stat-label">Total Registrations</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-clock"></i>
+                    <div class="stat-info">
+                        <span class="stat-value" id="pendingUsers">0</span>
+                        <span class="stat-label">Pending Approval</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-check-circle"></i>
+                    <div class="stat-info">
+                        <span class="stat-value" id="approvedUsers">0</span>
+                        <span class="stat-label">Approved Users</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-times-circle"></i>
+                    <div class="stat-info">
+                        <span class="stat-value" id="rejectedUsers">0</span>
+                        <span class="stat-label">Rejected Users</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="registrations-section">
+                <h2>User Registrations</h2>
+                <div class="filter-tabs">
+                    <button class="tab-btn active" onclick="filterRegistrations('all')">All</button>
+                    <button class="tab-btn" onclick="filterRegistrations('pending')">Pending</button>
+                    <button class="tab-btn" onclick="filterRegistrations('approved')">Approved</button>
+                    <button class="tab-btn" onclick="filterRegistrations('rejected')">Rejected</button>
+                </div>
+
+                <div class="registrations-list" id="registrationsList">
+                    <!-- Registration items will be loaded here -->
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="admin.js"></script>
+</body>
+</html>

@@ -1,0 +1,34 @@
+{
+  "name": "securevote-blockchain-voting",
+  "version": "1.0.0",
+  "description": "A secure, transparent, and immutable voting system built on blockchain technology",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js",
+    "build": "echo 'No build process needed'",
+    "test": "echo 'Tests not implemented yet'"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "nodemailer": "^6.9.7",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/blockchain-voting-app.git"
+  },
+  "keywords": [
+    "blockchain",
+    "voting",
+    "security",
+    "democracy",
+    "nodejs"
+  ],
+  "author": "SecureVote Team",
+  "license": "MIT"
+}
