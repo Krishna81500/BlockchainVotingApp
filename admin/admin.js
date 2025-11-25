@@ -4,27 +4,57 @@ let voters = [];
 let candidates = [
     {
         id: 1,
-        name: 'Alice Johnson',
-        party: 'Democratic Party',
+        name: 'Narendra Modi',
+        party: 'Bharatiya Janata Party (BJP)',
         photo: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=80&h=80&fit=crop&crop=face',
-        experience: '15 years experience',
-        votes: 3846
+        experience: '23+ years in politics',
+        achievements: 'Prime Minister of India (2014-present), Chief Minister of Gujarat (2001-2014), Digital India initiative, Swachh Bharat Mission, Make in India campaign',
+        votes: 4521
     },
     {
         id: 2,
-        name: 'Robert Smith',
-        party: 'Republican Party',
+        name: 'Rahul Gandhi',
+        party: 'Indian National Congress (INC)',
         photo: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=80&h=80&fit=crop&crop=face',
-        experience: '12 years experience',
-        votes: 3248
+        experience: '19+ years in politics',
+        achievements: 'Member of Parliament (Wayanad), Former President of Indian National Congress, NYAY scheme advocate, Rural employment programs supporter',
+        votes: 3847
     },
     {
         id: 3,
-        name: 'Maria Garcia',
-        party: 'Independent',
+        name: 'Mamata Banerjee',
+        party: 'All India Trinamool Congress (AITC)',
         photo: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=80&h=80&fit=crop&crop=face',
-        experience: '8 years experience',
-        votes: 1453
+        experience: '40+ years in politics',
+        achievements: 'Chief Minister of West Bengal (2011-present), Railway Minister (2009-2012), Kanyashree Prakalpa scheme, Sabuj Sathi bicycle program',
+        votes: 2934
+    },
+    {
+        id: 4,
+        name: 'Arvind Kejriwal',
+        party: 'Aam Aadmi Party (AAP)',
+        photo: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?w=80&h=80&fit=crop&crop=face',
+        experience: '12+ years in politics',
+        achievements: 'Chief Minister of Delhi (2013-2014, 2015-present), Free electricity and water schemes, Mohalla Clinics, Education reforms in Delhi',
+        votes: 2156
+    },
+    {
+        id: 5,
+        name: 'Yogi Adityanath',
+        party: 'Bharatiya Janata Party (BJP)',
+        photo: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=80&h=80&fit=crop&crop=face',
+        experience: '25+ years in politics',
+        achievements: 'Chief Minister of Uttar Pradesh (2017-present), Member of Parliament (1998-2017), UP Expressway projects, Law and order improvements',
+        votes: 1987
+    },
+    {
+        id: 6,
+        name: 'Priyanka Gandhi Vadra',
+        party: 'Indian National Congress (INC)',
+        photo: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=80&h=80&fit=crop&crop=face',
+        experience: '5+ years active politics',
+        achievements: 'Member of Parliament (Wayanad), General Secretary of AICC, Women empowerment advocate, Eastern UP in-charge',
+        votes: 1654
     }
 ];
 
@@ -151,25 +181,34 @@ function loadVoters() {
     const tbody = document.getElementById('votersTableBody');
     
     if (voters.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="7" style="text-align: center; color: #7f8c8d;">No voters registered yet</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="8" style="text-align: center; color: #7f8c8d;">No voters registered yet</td></tr>';
         return;
     }
     
-    tbody.innerHTML = voters.map(voter => `
+    tbody.innerHTML = voters.map(voter => {
+        const statusClass = voter.approved ? 'verified' : 'pending';
+        const statusText = voter.approved ? 'Approved' : 'Pending';
+        
+        return `
         <tr>
             <td>${voter.name}</td>
             <td>${voter.email}</td>
             <td>${voter.aadhaar ? voter.aadhaar.replace(/(\d{4})(\d{4})(\d{4})/, '$1 $2 $3') : 'N/A'}</td>
             <td>${voter.phone || 'N/A'}</td>
-            <td><span class="status-badge verified">Verified</span></td>
+            <td><span class="status-badge ${statusClass}">${statusText}</span></td>
             <td>${new Date(voter.registrationTime).toLocaleDateString()}</td>
             <td>
                 <div class="action-buttons">
+                    ${!voter.approved ? `
+                        <button class="action-btn approve" onclick="approveVoter('${voter.email}')" title="Approve">
+                            <i class="fas fa-check"></i>
+                        </button>
+                        <button class="action-btn reject" onclick="rejectVoter('${voter.email}')" title="Reject">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    ` : ''}
                     <button class="action-btn view" onclick="viewVoter('${voter.email}')">
                         <i class="fas fa-eye"></i>
-                    </button>
-                    <button class="action-btn edit" onclick="editVoter('${voter.email}')">
-                        <i class="fas fa-edit"></i>
                     </button>
                     <button class="action-btn delete" onclick="deleteVoter('${voter.email}')">
                         <i class="fas fa-trash"></i>
@@ -177,7 +216,8 @@ function loadVoters() {
                 </div>
             </td>
         </tr>
-    `).join('');
+    `;
+    }).join('');
 }
 
 function getStoredVoters() {
@@ -264,6 +304,33 @@ function exportVoters() {
     document.body.removeChild(link);
 }
 
+function approveVoter(email) {
+    if (confirm('Approve this voter registration?')) {
+        const userData = JSON.parse(localStorage.getItem(`user_${email}`));
+        if (userData) {
+            userData.approved = true;
+            userData.status = 'approved';
+            localStorage.setItem(`user_${email}`, JSON.stringify(userData));
+            loadVoters();
+            updateStats();
+            alert('Voter approved successfully');
+        }
+    }
+}
+
+function rejectVoter(email) {
+    if (confirm('Reject this voter registration?')) {
+        const userData = JSON.parse(localStorage.getItem(`user_${email}`));
+        if (userData) {
+            userData.approved = false;
+            userData.status = 'rejected';
+            localStorage.setItem(`user_${email}`, JSON.stringify(userData));
+            loadVoters();
+            alert('Voter registration rejected');
+        }
+    }
+}
+
 function refreshVoters() {
     loadVoters();
     alert('Voter data refreshed');
@@ -277,8 +344,11 @@ function loadCandidates() {
         <div class="candidate-card">
             <img src="${candidate.photo}" alt="${candidate.name}" class="candidate-photo">
             <h4>${candidate.name}</h4>
-            <p>${candidate.party}</p>
+            <p><strong>${candidate.party}</strong></p>
             <p style="font-size: 14px; color: #7f8c8d;">${candidate.experience}</p>
+            <div style="font-size: 12px; color: #555; margin: 10px 0; max-height: 60px; overflow-y: auto;">
+                <strong>Achievements:</strong> ${candidate.achievements}
+            </div>
             <p style="font-weight: 600; color: #3498db;">${candidate.votes.toLocaleString()} votes</p>
             <div style="display: flex; gap: 10px; margin-top: 15px;">
                 <button class="btn-secondary" onclick="editCandidate(${candidate.id})" style="flex: 1; padding: 8px;">
@@ -303,6 +373,7 @@ function editCandidate(id) {
         document.getElementById('candidateParty').value = candidate.party;
         document.getElementById('candidatePhoto').value = candidate.photo;
         document.getElementById('candidateExperience').value = candidate.experience;
+        document.getElementById('candidateAchievements').value = candidate.achievements || '';
         showModal('candidateModal');
     }
 }
@@ -320,6 +391,7 @@ function saveCandidateModal() {
     const party = document.getElementById('candidateParty').value;
     const photo = document.getElementById('candidatePhoto').value;
     const experience = document.getElementById('candidateExperience').value;
+    const achievements = document.getElementById('candidateAchievements').value;
     
     if (!name || !party) {
         alert('Please fill in all required fields');
@@ -332,6 +404,7 @@ function saveCandidateModal() {
         party,
         photo: photo || 'https://via.placeholder.com/80',
         experience: experience || 'New candidate',
+        achievements: achievements || 'No achievements listed',
         votes: 0
     };
     
@@ -345,6 +418,7 @@ function saveCandidateModal() {
     document.getElementById('candidateParty').value = '';
     document.getElementById('candidatePhoto').value = '';
     document.getElementById('candidateExperience').value = '';
+    document.getElementById('candidateAchievements').value = '';
 }
 
 // Election Management Functions

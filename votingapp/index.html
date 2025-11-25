@@ -59,15 +59,20 @@
                     </div>
                     
                     <div class="auth-options">
+                        <button class="btn-secondary" onclick="showRegisterScreen()">
+                            <i class="fas fa-user-plus"></i>
+                            Register as New Voter
+                        </button>
+                        
                         <button class="btn-primary" onclick="showLoginScreen()">
                             <i class="fas fa-sign-in-alt"></i>
                             Login to Vote
                         </button>
                         
-                        <button class="btn-secondary" onclick="showRegisterScreen()">
-                            <i class="fas fa-user-plus"></i>
-                            Register as New Voter
-                        </button>
+                        <p style="font-size: 14px; color: #7f8c8d; margin-top: 15px; text-align: center;">
+                            <i class="fas fa-info-circle"></i>
+                            First-time users must register and get admin approval before login
+                        </p>
                     </div>
                     
                     <div class="blockchain-info">
@@ -264,10 +269,11 @@
                     <div class="candidates-list">
                         <div class="candidate-card" onclick="selectCandidate(1)">
                             <div class="candidate-info">
-                                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=60&h=60&fit=crop&crop=face" alt="Candidate 1">
+                                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=60&h=60&fit=crop&crop=face" alt="Narendra Modi">
                                 <div class="candidate-details">
-                                    <h4>Alice Johnson</h4>
-                                    <p>Democratic Party</p>
+                                    <h4>Narendra Modi</h4>
+                                    <p><strong>BJP</strong></p>
+                                    <small>PM of India, Digital India, Swachh Bharat</small>
                                 </div>
                             </div>
                             <div class="vote-checkbox">
@@ -277,10 +283,11 @@
 
                         <div class="candidate-card" onclick="selectCandidate(2)">
                             <div class="candidate-info">
-                                <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=60&h=60&fit=crop&crop=face" alt="Candidate 2">
+                                <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=60&h=60&fit=crop&crop=face" alt="Rahul Gandhi">
                                 <div class="candidate-details">
-                                    <h4>Robert Smith</h4>
-                                    <p>Republican Party</p>
+                                    <h4>Rahul Gandhi</h4>
+                                    <p><strong>INC</strong></p>
+                                    <small>MP Wayanad, NYAY scheme advocate</small>
                                 </div>
                             </div>
                             <div class="vote-checkbox">
@@ -290,10 +297,53 @@
 
                         <div class="candidate-card" onclick="selectCandidate(3)">
                             <div class="candidate-info">
-                                <img src="https://images.unsplash.com/photo-1494790108755-2616b612b786?w=60&h=60&fit=crop&crop=face" alt="Candidate 3">
+                                <img src="https://images.unsplash.com/photo-1494790108755-2616b612b786?w=60&h=60&fit=crop&crop=face" alt="Mamata Banerjee">
                                 <div class="candidate-details">
-                                    <h4>Maria Garcia</h4>
-                                    <p>Independent</p>
+                                    <h4>Mamata Banerjee</h4>
+                                    <p><strong>AITC</strong></p>
+                                    <small>CM West Bengal, Kanyashree scheme</small>
+                                </div>
+                            </div>
+                            <div class="vote-checkbox">
+                                <i class="fas fa-circle"></i>
+                            </div>
+                        </div>
+
+                        <div class="candidate-card" onclick="selectCandidate(4)">
+                            <div class="candidate-info">
+                                <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?w=60&h=60&fit=crop&crop=face" alt="Arvind Kejriwal">
+                                <div class="candidate-details">
+                                    <h4>Arvind Kejriwal</h4>
+                                    <p><strong>AAP</strong></p>
+                                    <small>CM Delhi, Free electricity, Mohalla Clinics</small>
+                                </div>
+                            </div>
+                            <div class="vote-checkbox">
+                                <i class="fas fa-circle"></i>
+                            </div>
+                        </div>
+
+                        <div class="candidate-card" onclick="selectCandidate(5)">
+                            <div class="candidate-info">
+                                <img src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=60&h=60&fit=crop&crop=face" alt="Yogi Adityanath">
+                                <div class="candidate-details">
+                                    <h4>Yogi Adityanath</h4>
+                                    <p><strong>BJP</strong></p>
+                                    <small>CM UP, Expressway projects</small>
+                                </div>
+                            </div>
+                            <div class="vote-checkbox">
+                                <i class="fas fa-circle"></i>
+                            </div>
+                        </div>
+
+                        <div class="candidate-card" onclick="selectCandidate(6)">
+                            <div class="candidate-info">
+                                <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=60&h=60&fit=crop&crop=face" alt="Priyanka Gandhi">
+                                <div class="candidate-details">
+                                    <h4>Priyanka Gandhi Vadra</h4>
+                                    <p><strong>INC</strong></p>
+                                    <small>MP Wayanad, Women empowerment</small>
                                 </div>
                             </div>
                             <div class="vote-checkbox">
@@ -336,49 +386,97 @@
                     <div class="results-list">
                         <div class="result-item">
                             <div class="candidate-result">
-                                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=50&h=50&fit=crop&crop=face" alt="Alice Johnson">
+                                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=50&h=50&fit=crop&crop=face" alt="Narendra Modi">
                                 <div class="result-info">
-                                    <h4>Alice Johnson</h4>
-                                    <p>Democratic Party</p>
+                                    <h4>Narendra Modi</h4>
+                                    <p>BJP</p>
                                 </div>
                             </div>
                             <div class="vote-stats">
                                 <div class="progress-bar">
-                                    <div class="progress" style="width: 45%"></div>
+                                    <div class="progress" style="width: 35%"></div>
                                 </div>
-                                <span class="vote-count">3,846 votes (45%)</span>
+                                <span class="vote-count">4,521 votes (35%)</span>
                             </div>
                         </div>
 
                         <div class="result-item">
                             <div class="candidate-result">
-                                <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=50&h=50&fit=crop&crop=face" alt="Robert Smith">
+                                <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=50&h=50&fit=crop&crop=face" alt="Rahul Gandhi">
                                 <div class="result-info">
-                                    <h4>Robert Smith</h4>
-                                    <p>Republican Party</p>
+                                    <h4>Rahul Gandhi</h4>
+                                    <p>INC</p>
                                 </div>
                             </div>
                             <div class="vote-stats">
                                 <div class="progress-bar">
-                                    <div class="progress" style="width: 38%"></div>
+                                    <div class="progress" style="width: 30%"></div>
                                 </div>
-                                <span class="vote-count">3,248 votes (38%)</span>
+                                <span class="vote-count">3,847 votes (30%)</span>
                             </div>
                         </div>
 
                         <div class="result-item">
                             <div class="candidate-result">
-                                <img src="https://images.unsplash.com/photo-1494790108755-2616b612b786?w=50&h=50&fit=crop&crop=face" alt="Maria Garcia">
+                                <img src="https://images.unsplash.com/photo-1494790108755-2616b612b786?w=50&h=50&fit=crop&crop=face" alt="Mamata Banerjee">
                                 <div class="result-info">
-                                    <h4>Maria Garcia</h4>
-                                    <p>Independent</p>
+                                    <h4>Mamata Banerjee</h4>
+                                    <p>AITC</p>
+                                </div>
+                            </div>
+                            <div class="vote-stats">
+                                <div class="progress-bar">
+                                    <div class="progress" style="width: 23%"></div>
+                                </div>
+                                <span class="vote-count">2,934 votes (23%)</span>
+                            </div>
+                        </div>
+
+                        <div class="result-item">
+                            <div class="candidate-result">
+                                <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?w=50&h=50&fit=crop&crop=face" alt="Arvind Kejriwal">
+                                <div class="result-info">
+                                    <h4>Arvind Kejriwal</h4>
+                                    <p>AAP</p>
                                 </div>
                             </div>
                             <div class="vote-stats">
                                 <div class="progress-bar">
                                     <div class="progress" style="width: 17%"></div>
                                 </div>
-                                <span class="vote-count">1,453 votes (17%)</span>
+                                <span class="vote-count">2,156 votes (17%)</span>
+                            </div>
+                        </div>
+
+                        <div class="result-item">
+                            <div class="candidate-result">
+                                <img src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=50&h=50&fit=crop&crop=face" alt="Yogi Adityanath">
+                                <div class="result-info">
+                                    <h4>Yogi Adityanath</h4>
+                                    <p>BJP</p>
+                                </div>
+                            </div>
+                            <div class="vote-stats">
+                                <div class="progress-bar">
+                                    <div class="progress" style="width: 15%"></div>
+                                </div>
+                                <span class="vote-count">1,987 votes (15%)</span>
+                            </div>
+                        </div>
+
+                        <div class="result-item">
+                            <div class="candidate-result">
+                                <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=50&h=50&fit=crop&crop=face" alt="Priyanka Gandhi">
+                                <div class="result-info">
+                                    <h4>Priyanka Gandhi Vadra</h4>
+                                    <p>INC</p>
+                                </div>
+                            </div>
+                            <div class="vote-stats">
+                                <div class="progress-bar">
+                                    <div class="progress" style="width: 13%"></div>
+                                </div>
+                                <span class="vote-count">1,654 votes (13%)</span>
                             </div>
                         </div>
                     </div>

@@ -39,18 +39,51 @@ async function sendLoginOTP() {
     }
 
     try {
-        const otp = generateOTP();
+        // Check user status with server
+        const response = await fetch('/api/check-user', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ email })
+        });
         
-        // Send real email using direct SMTP call
-        const emailSent = await sendRealEmail(email, otp, 'login');
+        const result = await response.json();
         
-        if (emailSent) {
-            realOTPStore[email] = {
-                otp: otp,
-                expiry: Date.now() + 120000, // 2 minutes
-                type: 'login'
-            };
-            
+        if (!result.success) {
+            alert('Error checking user status. Please try again.');
+            return;
+        }
+        
+        if (!result.isRegistered) {
+            alert('Email not registered! Please register first before attempting to login.');
+            if (confirm('Would you like to go to registration page?')) {
+                showRegisterScreen();
+            }
+            return;
+        }
+        
+        if (!result.isApproved) {
+            if (result.status === 'pending') {
+                alert('Your registration is pending admin approval. Please wait for approval before logging in.');
+            } else if (result.status === 'rejected') {
+                alert('Your registration has been rejected. Please contact administrator.');
+            }
+            return;
+        }
+        
+        // Send OTP via server
+        const otpResponse = await fetch('/api/send-otp', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ email, purpose: 'login' })
+        });
+        
+        const otpResult = await otpResponse.json();
+        
+        if (otpResult.success) {
             document.getElementById('loginOtpSection').style.display = 'block';
             document.getElementById('loginSubmitBtn').innerHTML = '<i class="fas fa-key"></i> Verify OTP';
             document.getElementById('loginSubmitBtn').onclick = verifyLoginOTP;
@@ -58,14 +91,14 @@ async function sendLoginOTP() {
             sessionStorage.setItem('loginEmail', email);
             startOTPTimer('loginOtpTimer', 'loginResendOtp', 120);
             
-            alert(`Real OTP sent to ${email}\nCheck your email inbox for the verification code`);
+            alert(`OTP sent to registered email: ${email}\nCheck your email inbox for the verification code`);
         } else {
-            alert('Failed to send OTP. Please check your email address.');
+            alert(otpResult.message || 'Failed to send OTP. Please try again.');
         }
         
     } catch (error) {
         alert('Failed to send OTP. Please try again.');
-        console.error('OTP Error:', error);
+        console.error('Login OTP Error:', error);
     }
 }
 
@@ -153,24 +186,26 @@ async function verifyLoginOTP() {
         return;
     }
     
-    const storedData = realOTPStore[email];
-    
-    if (!storedData) {
-        alert('OTP not found. Please request a new OTP.');
-        return;
-    }
-    
-    if (Date.now() > storedData.expiry) {
-        delete realOTPStore[email];
-        alert('OTP expired. Please request a new OTP.');
-        return;
-    }
-    
-    if (enteredOTP === storedData.otp) {
-        delete realOTPStore[email];
-        loginSuccess(email);
-    } else {
-        alert('Invalid OTP. Please check your email and try again.');
+    try {
+        const response = await fetch('/api/verify-otp', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ email, otp: enteredOTP })
+        });
+        
+        const result = await response.json();
+        
+        if (result.success) {
+            loginSuccess(email);
+        } else {
+            alert(result.message || 'Invalid OTP. Please try again.');
+        }
+        
+    } catch (error) {
+        alert('Failed to verify OTP. Please try again.');
+        console.error('OTP Verification Error:', error);
     }
 }
 
@@ -192,9 +227,11 @@ function loginSuccess(email) {
 async function sendRegOTP() {
     const name = document.getElementById('fullName').value;
     const email = document.getElementById('regEmail').value;
+    const aadhaar = document.getElementById('aadhaarNumber').value;
+    const phone = document.getElementById('regPhone').value;
     
-    if (!name || !email) {
-        alert('Please fill name and email');
+    if (!name || !email || !aadhaar || !phone) {
+        alert('Please fill all required fields');
         return;
     }
     
@@ -204,17 +241,17 @@ async function sendRegOTP() {
     }
 
     try {
-        const otp = generateOTP();
+        const response = await fetch('/api/send-otp', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ email, purpose: 'registration' })
+        });
         
-        const emailSent = await sendRealEmail(email, otp, 'registration');
+        const result = await response.json();
         
-        if (emailSent) {
-            realOTPStore[email] = {
-                otp: otp,
-                expiry: Date.now() + 120000,
-                type: 'registration'
-            };
-            
+        if (result.success) {
             document.getElementById('regOtpSection').style.display = 'block';
             document.getElementById('registerBtn').innerHTML = '<i class="fas fa-check"></i> Complete Registration';
             document.getElementById('registerBtn').onclick = completeRegistration;
@@ -222,19 +259,19 @@ async function sendRegOTP() {
             startOTPTimer('regOtpTimer', 'regResendOtp', 120);
             
             const regData = {
-                name: document.getElementById('fullName').value,
-                aadhaar: document.getElementById('aadhaarNumber').value,
+                aadharName: name,
                 email: email,
-                phone: document.getElementById('regPhone').value,
-                aadhaarPhoto,
-                facePhoto
+                phone: phone,
+                aadharNumber: aadhaar,
+                state: 'India',
+                country: 'India'
             };
             
             sessionStorage.setItem('regData', JSON.stringify(regData));
             
-            alert(`Real registration OTP sent to ${email}\nCheck your email inbox for the verification code`);
+            alert(`Registration OTP sent to ${email}\nCheck your email inbox for the verification code`);
         } else {
-            alert('Failed to send OTP. Please check your email address.');
+            alert(result.message || 'Failed to send OTP. Please try again.');
         }
         
     } catch (error) {
@@ -252,42 +289,37 @@ async function completeRegistration() {
         return;
     }
     
-    const storedData = realOTPStore[regData.email];
-    
-    if (!storedData) {
-        alert('OTP not found. Please request a new OTP.');
-        return;
-    }
-    
-    if (Date.now() > storedData.expiry) {
-        delete realOTPStore[regData.email];
-        alert('OTP expired. Please request a new OTP.');
-        return;
-    }
-    
-    if (enteredOTP === storedData.otp) {
-        delete realOTPStore[regData.email];
-        registrationSuccess(regData);
-    } else {
-        alert('Invalid OTP. Please check your email and try again.');
+    try {
+        const response = await fetch('/api/complete-registration', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ 
+                email: regData.email, 
+                otp: enteredOTP, 
+                registrationData: regData 
+            })
+        });
+        
+        const result = await response.json();
+        
+        if (result.success) {
+            sessionStorage.removeItem('regData');
+            alert('Registration successful! Your account is pending admin approval. You will be able to login once approved by the administrator.');
+            showHomeScreen();
+            resetRegistrationForm();
+        } else {
+            alert(result.message || 'Registration failed. Please try again.');
+        }
+        
+    } catch (error) {
+        alert('Registration failed. Please try again.');
+        console.error('Registration Error:', error);
     }
 }
 
-function registrationSuccess(regData) {
-    const userData = {
-        ...regData,
-        registrationTime: new Date(),
-        verified: true
-    };
-    
-    localStorage.setItem(`user_${regData.email}`, JSON.stringify(userData));
-    
-    sessionStorage.removeItem('regData');
-    
-    alert('Registration successful with real OTP verification! You can now login.');
-    showHomeScreen();
-    resetRegistrationForm();
-}
+// Remove this function as registration is now handled server-side
 
 // Camera Functions
 async function captureAadhaar() {

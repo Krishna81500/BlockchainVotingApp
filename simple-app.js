@@ -104,7 +104,7 @@ function resetLoginForm() {
 }
 
 // Registration functions
-function sendRegOTP() {
+async function sendRegOTP() {
     const email = document.getElementById('regEmail').value;
     const name = document.getElementById('aadharName').value;
     
@@ -113,26 +113,81 @@ function sendRegOTP() {
         return;
     }
     
-    document.getElementById('regOtpSection').style.display = 'block';
-    document.getElementById('registerBtn').innerHTML = 'Complete Registration';
-    document.getElementById('registerBtn').onclick = completeRegistration;
-    
-    alert('OTP sent to ' + email + '\nDemo OTP: 123456');
+    try {
+        const response = await fetch('/api/send-otp', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                email: email,
+                purpose: 'registration'
+            })
+        });
+        
+        const result = await response.json();
+        
+        if (result.success) {
+            document.getElementById('regOtpSection').style.display = 'block';
+            document.getElementById('registerBtn').innerHTML = 'Complete Registration';
+            document.getElementById('registerBtn').onclick = completeRegistration;
+            alert('OTP sent to your email successfully!');
+        } else {
+            alert(result.message || 'Failed to send OTP');
+        }
+    } catch (error) {
+        console.error('Error sending OTP:', error);
+        alert('Failed to send OTP. Please try again.');
+    }
 }
 
-function completeRegistration() {
+async function completeRegistration() {
     const otp = document.getElementById('regOtpCode').value;
+    const email = document.getElementById('regEmail').value;
+    
     if (!otp) {
         alert('Please enter OTP');
         return;
     }
     
-    if (otp === '123456') {
-        alert('Registration successful!');
-        showHomeScreen();
-        resetRegistrationForm();
-    } else {
-        alert('Invalid OTP. Use: 123456');
+    // Collect all registration data
+    const registrationData = {
+        email: email,
+        aadharName: document.getElementById('aadharName').value,
+        phone: document.getElementById('phone').value,
+        voterId: document.getElementById('voterId').value,
+        address: document.getElementById('address').value,
+        city: document.getElementById('city').value,
+        state: document.getElementById('state').value,
+        country: document.getElementById('country').value,
+        pincode: document.getElementById('pincode').value
+    };
+    
+    try {
+        const response = await fetch('/api/complete-registration', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                email: email,
+                otp: otp,
+                registrationData: registrationData
+            })
+        });
+        
+        const result = await response.json();
+        
+        if (result.success) {
+            alert('Registration submitted successfully! Please wait for admin approval.');
+            showHomeScreen();
+            resetRegistrationForm();
+        } else {
+            alert(result.message || 'Registration failed');
+        }
+    } catch (error) {
+        console.error('Error completing registration:', error);
+        alert('Registration failed. Please try again.');
     }
 }
 
@@ -313,8 +368,36 @@ function resendLoginOTP() {
     alert('New OTP sent!');
 }
 
-function resendRegOTP() {
-    alert('New OTP sent!');
+async function resendRegOTP() {
+    const email = document.getElementById('regEmail').value;
+    if (!email) {
+        alert('Please enter email first');
+        return;
+    }
+    
+    try {
+        const response = await fetch('/api/send-otp', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                email: email,
+                purpose: 'registration'
+            })
+        });
+        
+        const result = await response.json();
+        
+        if (result.success) {
+            alert('New OTP sent to your email!');
+        } else {
+            alert(result.message || 'Failed to resend OTP');
+        }
+    } catch (error) {
+        console.error('Error resending OTP:', error);
+        alert('Failed to resend OTP. Please try again.');
+    }
 }
 
 // Initialize app

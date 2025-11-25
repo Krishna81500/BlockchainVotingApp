@@ -808,3 +808,27 @@ body {
         grid-template-columns: 1fr;
     }
 }
+/* Approval status styles */
+.status-badge.pending {
+    background: #fff3cd;
+    color: #856404;
+    border: 1px solid #ffeaa7;
+}
+
+.action-btn.approve {
+    background: #27ae60;
+    color: white;
+}
+
+.action-btn.approve:hover {
+    background: #219a52;
+}
+
+.action-btn.reject {
+    background: #e74c3c;
+    color: white;
+}
+
+.action-btn.reject:hover {
+    background: #c0392b;
+}

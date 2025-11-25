@@ -375,11 +375,19 @@
                     <div class="candidates-list">
                         <div class="candidate-card" onclick="selectCandidate(1)">
                             <div class="candidate-info">
-                                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=60&h=60&fit=crop&crop=face" alt="Candidate 1">
+                                <div class="candidate-avatar">
+                                    <i class="fas fa-user-tie"></i>
+                                </div>
                                 <div class="candidate-details">
-                                    <h4>Alice Johnson</h4>
-                                    <p>Democratic Party</p>
-                                    <span class="experience">15 years experience</span>
+                                    <h4>Narendra Modi</h4>
+                                    <p>Bharatiya Janata Party (BJP)</p>
+                                    <div class="achievements">
+                                        <span class="achievement">Prime Minister of India (2014-present)</span>
+                                        <span class="achievement">Chief Minister of Gujarat (2001-2014)</span>
+                                        <span class="achievement">Digital India Initiative</span>
+                                        <span class="achievement">Swachh Bharat Mission</span>
+                                    </div>
+                                    <span class="experience">23+ years in politics</span>
                                 </div>
                             </div>
                             <div class="vote-checkbox">
@@ -389,11 +397,19 @@
 
                         <div class="candidate-card" onclick="selectCandidate(2)">
                             <div class="candidate-info">
-                                <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=60&h=60&fit=crop&crop=face" alt="Candidate 2">
+                                <div class="candidate-avatar">
+                                    <i class="fas fa-user-tie"></i>
+                                </div>
                                 <div class="candidate-details">
-                                    <h4>Robert Smith</h4>
-                                    <p>Republican Party</p>
-                                    <span class="experience">12 years experience</span>
+                                    <h4>Rahul Gandhi</h4>
+                                    <p>Indian National Congress (INC)</p>
+                                    <div class="achievements">
+                                        <span class="achievement">Member of Parliament, Wayanad</span>
+                                        <span class="achievement">Former Congress President (2017-2019)</span>
+                                        <span class="achievement">Youth Congress President (2007-2013)</span>
+                                        <span class="achievement">Advocate for farmers' rights</span>
+                                    </div>
+                                    <span class="experience">19+ years in politics</span>
                                 </div>
                             </div>
                             <div class="vote-checkbox">
@@ -403,11 +419,63 @@
 
                         <div class="candidate-card" onclick="selectCandidate(3)">
                             <div class="candidate-info">
-                                <img src="https://images.unsplash.com/photo-1494790108755-2616b612b786?w=60&h=60&fit=crop&crop=face" alt="Candidate 3">
+                                <div class="candidate-avatar">
+                                    <i class="fas fa-user-tie"></i>
+                                </div>
                                 <div class="candidate-details">
-                                    <h4>Maria Garcia</h4>
-                                    <p>Independent</p>
-                                    <span class="experience">8 years experience</span>
+                                    <h4>Arvind Kejriwal</h4>
+                                    <p>Aam Aadmi Party (AAP)</p>
+                                    <div class="achievements">
+                                        <span class="achievement">Chief Minister of Delhi (2015-present)</span>
+                                        <span class="achievement">Ramon Magsaysay Award (2006)</span>
+                                        <span class="achievement">Education & Healthcare reforms</span>
+                                        <span class="achievement">Anti-corruption activist</span>
+                                    </div>
+                                    <span class="experience">12+ years in politics</span>
+                                </div>
+                            </div>
+                            <div class="vote-checkbox">
+                                <i class="fas fa-circle"></i>
+                            </div>
+                        </div>
+
+                        <div class="candidate-card" onclick="selectCandidate(4)">
+                            <div class="candidate-info">
+                                <div class="candidate-avatar">
+                                    <i class="fas fa-user-tie"></i>
+                                </div>
+                                <div class="candidate-details">
+                                    <h4>Mamata Banerjee</h4>
+                                    <p>All India Trinamool Congress (AITC)</p>
+                                    <div class="achievements">
+                                        <span class="achievement">Chief Minister of West Bengal (2011-present)</span>
+                                        <span class="achievement">Railway Minister (2009-2012)</span>
+                                        <span class="achievement">Founded Trinamool Congress (1998)</span>
+                                        <span class="achievement">Women empowerment advocate</span>
+                                    </div>
+                                    <span class="experience">40+ years in politics</span>
+                                </div>
+                            </div>
+                            <div class="vote-checkbox">
+                                <i class="fas fa-circle"></i>
+                            </div>
+                        </div>
+
+                        <div class="candidate-card" onclick="selectCandidate(5)">
+                            <div class="candidate-info">
+                                <div class="candidate-avatar">
+                                    <i class="fas fa-user-tie"></i>
+                                </div>
+                                <div class="candidate-details">
+                                    <h4>Yogi Adityanath</h4>
+                                    <p>Bharatiya Janata Party (BJP)</p>
+                                    <div class="achievements">
+                                        <span class="achievement">Chief Minister of Uttar Pradesh (2017-present)</span>
+                                        <span class="achievement">Member of Parliament (1998-2017)</span>
+                                        <span class="achievement">Law & order improvements in UP</span>
+                                        <span class="achievement">Infrastructure development</span>
+                                    </div>
+                                    <span class="experience">25+ years in politics</span>
                                 </div>
                             </div>
                             <div class="vote-checkbox">
@@ -450,49 +518,91 @@
                     <div class="results-list">
                         <div class="result-item">
                             <div class="candidate-result">
-                                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=50&h=50&fit=crop&crop=face" alt="Alice Johnson">
+                                <div class="candidate-avatar">
+                                    <i class="fas fa-user-tie"></i>
+                                </div>
                                 <div class="result-info">
-                                    <h4>Alice Johnson</h4>
-                                    <p>Democratic Party</p>
+                                    <h4>Narendra Modi</h4>
+                                    <p>Bharatiya Janata Party (BJP)</p>
                                 </div>
                             </div>
                             <div class="vote-stats">
                                 <div class="progress-bar">
-                                    <div class="progress" style="width: 45%"></div>
+                                    <div class="progress" style="width: 42%"></div>
                                 </div>
-                                <span class="vote-count">3,846 votes (45%)</span>
+                                <span class="vote-count">4,247 votes (42%)</span>
                             </div>
                         </div>
 
                         <div class="result-item">
                             <div class="candidate-result">
-                                <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=50&h=50&fit=crop&crop=face" alt="Robert Smith">
+                                <div class="candidate-avatar">
+                                    <i class="fas fa-user-tie"></i>
+                                </div>
                                 <div class="result-info">
-                                    <h4>Robert Smith</h4>
-                                    <p>Republican Party</p>
+                                    <h4>Rahul Gandhi</h4>
+                                    <p>Indian National Congress (INC)</p>
                                 </div>
                             </div>
                             <div class="vote-stats">
                                 <div class="progress-bar">
-                                    <div class="progress" style="width: 38%"></div>
+                                    <div class="progress" style="width: 28%"></div>
                                 </div>
-                                <span class="vote-count">3,248 votes (38%)</span>
+                                <span class="vote-count">2,834 votes (28%)</span>
                             </div>
                         </div>
 
                         <div class="result-item">
                             <div class="candidate-result">
-                                <img src="https://images.unsplash.com/photo-1494790108755-2616b612b786?w=50&h=50&fit=crop&crop=face" alt="Maria Garcia">
+                                <div class="candidate-avatar">
+                                    <i class="fas fa-user-tie"></i>
+                                </div>
                                 <div class="result-info">
-                                    <h4>Maria Garcia</h4>
-                                    <p>Independent</p>
+                                    <h4>Arvind Kejriwal</h4>
+                                    <p>Aam Aadmi Party (AAP)</p>
                                 </div>
                             </div>
                             <div class="vote-stats">
                                 <div class="progress-bar">
-                                    <div class="progress" style="width: 17%"></div>
+                                    <div class="progress" style="width: 15%"></div>
                                 </div>
-                                <span class="vote-count">1,453 votes (17%)</span>
+                                <span class="vote-count">1,518 votes (15%)</span>
+                            </div>
+                        </div>
+
+                        <div class="result-item">
+                            <div class="candidate-result">
+                                <div class="candidate-avatar">
+                                    <i class="fas fa-user-tie"></i>
+                                </div>
+                                <div class="result-info">
+                                    <h4>Mamata Banerjee</h4>
+                                    <p>All India Trinamool Congress (AITC)</p>
+                                </div>
+                            </div>
+                            <div class="vote-stats">
+                                <div class="progress-bar">
+                                    <div class="progress" style="width: 10%"></div>
+                                </div>
+                                <span class="vote-count">1,012 votes (10%)</span>
+                            </div>
+                        </div>
+
+                        <div class="result-item">
+                            <div class="candidate-result">
+                                <div class="candidate-avatar">
+                                    <i class="fas fa-user-tie"></i>
+                                </div>
+                                <div class="result-info">
+                                    <h4>Yogi Adityanath</h4>
+                                    <p>Bharatiya Janata Party (BJP)</p>
+                                </div>
+                            </div>
+                            <div class="vote-stats">
+                                <div class="progress-bar">
+                                    <div class="progress" style="width: 5%"></div>
+                                </div>
+                                <span class="vote-count">506 votes (5%)</span>
                             </div>
                         </div>
                     </div>

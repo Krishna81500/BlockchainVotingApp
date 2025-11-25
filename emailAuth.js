@@ -1,7 +1,7 @@
 // Email OTP Authentication Module
 class EmailAuth {
     constructor() {
-        this.baseURL = 'http://localhost:3003/api';
+        this.baseURL = 'http://localhost:3000/api';
         this.otpTimers = new Map();
     }
 

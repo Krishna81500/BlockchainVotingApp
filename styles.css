@@ -1005,6 +1005,69 @@ body::before {
     object-fit: cover;
 }
 
+.candidate-avatar {
+    width: 60px;
+    height: 60px;
+    background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 24px;
+    box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+    border: 2px solid rgba(59, 130, 246, 0.2);
+}
+
+.achievements {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin: 8px 0;
+}
+
+.achievement {
+    font-size: 11px;
+    background: linear-gradient(135deg, #eff6ff, #dbeafe);
+    color: #1e40af;
+    padding: 3px 8px;
+    border-radius: 12px;
+    border: 1px solid rgba(59, 130, 246, 0.2);
+    font-weight: 500;
+    display: inline-block;
+    margin-right: 4px;
+    margin-bottom: 2px;
+}
+
+.candidate-details {
+    flex: 1;
+}
+
+.candidate-details h4 {
+    font-size: 18px;
+    font-weight: 700;
+    color: #1f2937;
+    margin-bottom: 4px;
+}
+
+.candidate-details p {
+    font-size: 14px;
+    color: #3b82f6;
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+
+.experience {
+    font-size: 12px;
+    color: #059669;
+    font-weight: 600;
+    background: rgba(16, 185, 129, 0.1);
+    padding: 2px 8px;
+    border-radius: 10px;
+    display: inline-block;
+    margin-top: 4px;
+}
+
 .candidate-details h4 {
     font-size: 16px;
     font-weight: bold;
@@ -1124,6 +1187,20 @@ body::before {
     height: 50px;
     border-radius: 50%;
     object-fit: cover;
+}
+
+.candidate-result .candidate-avatar {
+    width: 50px;
+    height: 50px;
+    background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 20px;
+    box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+    border: 2px solid rgba(59, 130, 246, 0.2);
 }
 
 .result-info h4 {
@@ -1771,6 +1848,13 @@ select, textarea {
     background: white !important;
     transition: all 0.3s;
     color: #1f2937 !important;
+    font-weight: 500;
+}
+
+textarea {
+    resize: vertical;
+    min-height: 80px;
+    font-family: inherit;
 }
 
 select:focus, textarea:focus {
@@ -1799,6 +1883,253 @@ select:focus, textarea:focus {
     font-size: 16px;
 }
 
+/* Aadhaar Photo Section */
+.aadhaar-photo-section {
+    margin: 25px 0;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 15px;
+    border: 2px solid rgba(59, 130, 246, 0.3);
+}
+
+.section-header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.section-header h4 {
+    font-size: 18px;
+    font-weight: 700;
+    color: #1f2937;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.section-header p {
+    font-size: 14px;
+    color: #6b7280;
+    margin: 0;
+}
+
+.photo-upload-options {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
+    justify-content: center;
+}
+
+.aadhaar-capture {
+    text-align: center;
+    margin: 15px 0;
+}
+
+.aadhaar-capture video {
+    border: 2px solid #3b82f6;
+    border-radius: 8px;
+    margin-bottom: 10px;
+}
+
+#aadhaarPhotoPreview, #facePhotoPreview {
+    text-align: center;
+    margin: 15px 0;
+    padding: 15px;
+    background: rgba(16, 185, 129, 0.1);
+    border: 2px solid #10b981;
+    border-radius: 12px;
+}
+
+#aadhaarPhotoPreview img, #facePhotoPreview img {
+    display: block;
+    margin: 0 auto 10px;
+    border: 2px solid #10b981;
+    box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+}
+
+#aadhaarPhotoPreview p, #facePhotoPreview p {
+    color: #059669;
+    font-weight: 600;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+#aadhaarPhotoPreview p::before, #facePhotoPreview p::before {
+    content: '✓';
+    font-size: 16px;
+    color: #10b981;
+}
+
+/* Face Registration Styles */
+.face-registration {
+    margin: 25px 0;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 15px;
+    border: 2px solid rgba(59, 130, 246, 0.3);
+}
+
+.reg-face-scanner {
+    position: relative;
+    width: 200px;
+    height: 200px;
+    margin: 0 auto 20px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 3px solid #3b82f6;
+    background: #f8fafc;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.reg-face-scanner video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: none;
+}
+
+.reg-face-scanner.active video {
+    display: block;
+}
+
+.reg-face-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 2;
+}
+
+.reg-face-circle {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    right: 10px;
+    bottom: 10px;
+    border: 3px dashed #10b981;
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+}
+
+/* Camera placeholder */
+.reg-face-scanner::before {
+    content: '📷';
+    font-size: 48px;
+    color: #6b7280;
+    position: absolute;
+    z-index: 1;
+}
+
+.reg-face-scanner.active::before {
+    display: none;
+}
+
+/* Vote Face Verification Enhanced */
+.vote-face-verification {
+    margin: 20px 0;
+    text-align: center;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 15px;
+    border: 2px solid rgba(59, 130, 246, 0.3);
+}
+
+.mini-face-scanner {
+    position: relative;
+    width: 150px;
+    height: 150px;
+    margin: 0 auto 15px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 3px solid #3b82f6;
+    background: #f8fafc;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.mini-face-scanner video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: none;
+}
+
+.mini-face-scanner.active video {
+    display: block;
+}
+
+.mini-face-scanner::before {
+    content: '👤';
+    font-size: 36px;
+    color: #6b7280;
+    position: absolute;
+    z-index: 1;
+}
+
+.mini-face-scanner.active::before {
+    display: none;
+}
+
+/* Button States */
+.btn-secondary.verified {
+    background: linear-gradient(135deg, #10b981, #059669) !important;
+    color: white !important;
+    border-color: #10b981 !important;
+}
+
+.btn-secondary.verified:hover {
+    background: linear-gradient(135deg, #059669, #047857) !important;
+}
+
+/* Loading states for buttons */
+.btn-primary:disabled, .btn-secondary:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none !important;
+}
+
+.btn-primary .fa-spinner, .btn-secondary .fa-spinner {
+    animation: spin 1s linear infinite;
+}
+
+/* Enhanced Modal for Face Verification */
+.modal-body .vote-face-verification {
+    background: rgba(248, 250, 252, 0.8);
+    border: 1px solid rgba(59, 130, 246, 0.2);
+}
+
+/* Success/Error States */
+.face-verification-success {
+    background: rgba(16, 185, 129, 0.1);
+    border: 2px solid #10b981;
+    color: #059669;
+    padding: 15px;
+    border-radius: 12px;
+    text-align: center;
+    margin: 15px 0;
+    font-weight: 600;
+}
+
+.face-verification-error {
+    background: rgba(239, 68, 68, 0.1);
+    border: 2px solid #ef4444;
+    color: #dc2626;
+    padding: 15px;
+    border-radius: 12px;
+    text-align: center;
+    margin: 15px 0;
+    font-weight: 600;
+}
+
 /* Responsive adjustments */
 @media (max-width: 400px) {
     .mobile-container {
@@ -1813,12 +2144,22 @@ select:focus, textarea:focus {
     }
     
     .mini-face-scanner {
-        width: 100px;
-        height: 100px;
+        width: 120px;
+        height: 120px;
     }
     
     .reg-face-scanner {
-        width: 120px;
-        height: 120px;
+        width: 160px;
+        height: 160px;
+    }
+    
+    .photo-upload-options {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .photo-upload-options button {
+        width: 100%;
+        max-width: 250px;
     }
 }
